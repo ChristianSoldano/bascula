@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block imports %}{% endblock %}
+
+{% block content %}
+<label>Generadores</label><br>
+
+<select id="generador" title="Seleccione generador" data-live-search="true" data-width="284px">
+    {% for item in generadores %}
+        <option value="{{item.id}}">{{item.id}} - {{item.nombre}}</option>
+    {% endfor %}
+</select>
+
+<br>
+<label>Transportistas</label><br>
+<select id="transportista" title="Seleccione transportista" data-live-search="true" data-width="284px">
+    {% for item in transportistas %}
+        <option value="{{item.id}}">{{item.codigo}} - {{item.empresa}}</option>
+    {% endfor %}
+</select>
+
+<br>
+<label>Camiones</label><br>
+<select id="camiones" title="Seleccione camiones" data-live-search="true" data-width="284px">
+    {% for item in camiones %}
+        <option value="{{item.id}}">{{item.patente}}</option>
+    {% endfor %}
+</select>
+
+<br>
+<label>Residuos</label><br>
+<select id="residuos" title="Seleccione residuos" data-live-search="true" data-width="284px">
+    {% for item in residuos %}
+        <option value="{{item.id}}">{{item.residuo}}</option>
+    {% endfor %}
+</select>
+<br>
+<label>Peso</label><br>
+<input type="text" class="form-control" style="width:284px">
+<br>
+<button class="btn btn-primary">Enviar</button>
+
+{% endblock %}
