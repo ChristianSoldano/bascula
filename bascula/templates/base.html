@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Báscula</title>
-    <!-- <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/x-icon" /> -->
+     <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/x-icon" /> 
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}" type="text/css">
@@ -15,11 +15,26 @@
 </head>
 
 <body>
-    <!-- NAV -->
-
+     <!-- NAV -->
+     <nav>
+        <div class="w3-bar w3-black nav">
+            <a href="#" class="w3-bar-item w3-button">Home</a>
+            <a href="#" class="w3-bar-item w3-button">Link 1</a>
+            <a href="#" class="w3-bar-item w3-button">Link 2</a>
+            <a href="#" class="w3-bar-item w3-button">Link 3</a>
+        </div>
+    </nav>
     {% block content %}{% endblock %}
 
     <!-- FOOTER -->
+    <footer class="footer">
+        <p> Chrisma desarrolladores <br>
+         Tel: 12312312312 <br>
+         csidjasi@ksda.com <br>
+        <img src="{% static 'img/logo.png' %}" class="logo" alt=""> <br>
+         </p>
+
+    </footer>
 
     <!-- Js Plugins -->
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>

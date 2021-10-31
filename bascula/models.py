@@ -74,7 +74,7 @@ class Destino(models.Model):
 
 class Residuo(models.Model):
     id = models.AutoField(primary_key=True)
-    residuo = models.CharField(max_length=250, blank=False, null=False)
+    residuo = models.CharField(max_length=250, blank=False, null=False, db_column='residuo')
     activo =  models.IntegerField(null=False, blank=False, default=1)
     f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
 
@@ -108,13 +108,10 @@ class Pesaje(models.Model):
 
 class GeneradoresResiduos(models.Model):
     id = models.AutoField(primary_key=True)
-    id_generador = models.ForeignKey(Generador, on_delete=models.PROTECT, blank=False, null=False )
-    id_residuo = models.ForeignKey(Residuo, on_delete=models.PROTECT, blank=False, null=False )
+    id_generador = models.ForeignKey(Generador, on_delete=models.PROTECT, blank=False, null=False, db_column='id_generador', name='id_generador')
+    id_residuo = models.ForeignKey(Residuo, on_delete=models.PROTECT, blank=False, null=False, db_column='id_residuo', name='id_residuo')
     f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo =  models.IntegerField(null=False, blank=False, default=1)
-
-    def __str__(self):
-        return self.id
 
     class Meta:
         verbose_name_plural = "GeneradoresResiduos"
