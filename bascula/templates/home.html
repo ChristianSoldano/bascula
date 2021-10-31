@@ -3,57 +3,60 @@
 
 {% block imports %}{% endblock %}
 
-{% block content %}
-<div class="body">
-    <h1>Pesaje</h1>
-    <label>Generadores</label><br>
+{% block content %} 
 
-    <select class="selectpicker" id="generador" title="Seleccione generador" data-live-search="true" data-width="284px">
-        {% for item in generadores %}
-        <option value="{{item.id}}">{{item.id}} - {{item.nombre}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label>Residuos</label><br>
-    <select class="selectpicker" id="residuos" title="Seleccione residuos" data-live-search="true" data-width="284px">
-       
-    </select>
-    <br>
-    <label>Transportistas</label><br>
-    <select class="selectpicker" id="transportista" title="Seleccione transportista" data-live-search="true"
-        data-width="284px">
-        {% for item in transportistas %}
-        <option value="{{item.id}}">{{item.codigo}} - {{item.empresa}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label>Camiones</label><br>
-    <select class="selectpicker" id="camiones" title="Seleccione camiones" data-live-search="true" data-width="284px">
-        {% for item in camiones %}
-        <option value="{{item.id}}">{{item.patente}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label>Destino</label><br>
-    <select class="selectpicker" id="destino" title="Seleccione destino" data-live-search="true" data-width="284px">
-        {% for item in destinos %}
-        <option value="{{item.id}}">{{item.destino}}</option>
-        {% endfor %}
-    </select>
-    <br>
-    <label>Peso</label><br>
-    <div class="col-2">
-        <div class="input-group">
-            <input id="peso" type="text" required class="form-control" placeholder="peso">
-            <span class="input-group-addon"></span>
-            <input id="tara" type="text" required class="form-control" disabled placeholder="Tara">
+<div class="row">
+    <h1 class="text-center mt-5">Pesaje</h1>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <label>Generadores</label><br>
+        <select class="selectpicker form-control sm" id="generador" title="Seleccione generador" data-live-search="true">
+            {% for item in generadores %}
+            <option value="{{item.id}}">{{item.id}} - {{item.nombre}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label>Residuos</label><br>
+        <select class="selectpicker form-control sm" id="residuos" title="Seleccione residuos" data-live-search="true">
+
+        </select>
+        <br>
+        <label>Transportistas</label><br>
+        <select class="selectpicker form-control sm" id="transportista" title="Seleccione transportista" data-live-search="true">
+            {% for item in transportistas %}
+            <option value="{{item.id}}">{{item.codigo}} - {{item.empresa}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label>Camiones</label><br>
+        <select class="selectpicker form-control sm" id="camiones" title="Seleccione camiones" data-live-search="true">
+            {% for item in camiones %}
+            <option value="{{item.id}}">{{item.patente}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label>Destino</label><br>
+        <select class="selectpicker form-control sm" id="destino" title="Seleccione destino" data-live-search="true">
+            {% for item in destinos %}
+            <option value="{{item.id}}">{{item.destino}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label>Peso</label><br>
+        <div class="form-control sm">
+            <div class="input-group">
+                <input id="peso" type="text" required class="form-control border-success" placeholder="Peso">
+                <span class="input-group-addon"></span>
+                <input id="tara" type="text" required class="form-control-sm border-primary" style="background-color: rgb(231, 220, 220)"  placeholder="Tara">
+            </div>
         </div>
+        <div class="form-control btn-group mt-3">
+            <button id="limpiar" class="btn btn-dark border-primary">Limpiar</button>
+            <button id="enviar" class="btn btn-success border-primary">Enviar</button>
+        </div>
+        <br>
     </div>
-    <div class="btn-group mt-3 ms-10">
-        <button id="limpiar" class="btn btn-dark">Limpiar</button>
-        <button id="enviar" class="btn btn-dark">Enviar</button>
-    </div>
-    <br>
+    <div class="col-sm-2"></div>
 </div>
 {% endblock %}
 
@@ -74,13 +77,12 @@
                     }
                 }).done(function (data) {
                     $('#residuos').html('');
-                    if (data.length == 0){
-                        $('#residuos').append(`<option selected hidden value="0">No se encontraron resultados</option>`);
+                    if (data.length == 0) {
+                        $('#residuos').append(`<option disabled value="0">No se encontraron resultados</option>`);
                         $('.selectpicker').selectpicker("refresh");
                     }
                     data.forEach(element => {
                         $('#residuos').append(`<option value="${element.id}">${element.residuo}</option>`);
-
                     });
                     $('.selectpicker').selectpicker("refresh");
                 });
@@ -88,8 +90,6 @@
 
         })
     };
-
-
     seleccion();
 </script>
 {% endblock %}

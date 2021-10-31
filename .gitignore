@@ -118,4 +118,4 @@ GitHub.sublime-settings
 .history
 
 # settings
-.app/settings.py
+app/settings.py
