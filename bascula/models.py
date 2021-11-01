@@ -93,13 +93,14 @@ class Pesaje(models.Model):
     id_transportista = models.ForeignKey(Transportista, on_delete=models.PROTECT, blank=False, null=False )
     id_camion = models.ForeignKey(Camion, on_delete=models.PROTECT, blank=False, null=False )
     id_destino = models.ForeignKey(Destino, on_delete=models.PROTECT, blank=False, null=False )
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT, blank=False, null=False )
+    """ id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT, blank=False, null=False ) """
+    id_usuario = models.IntegerField(Usuario,null=False, blank=False, default=1)  
     pesaje = models.FloatField(null=False, blank=False)
     f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo =  models.IntegerField(null=False, blank=False, default=1)    
 
     def __str__(self):
-        return self.patente
+        return self.pesaje
 
     class Meta:
         verbose_name_plural = "Pesajes"
