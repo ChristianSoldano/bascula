@@ -18,24 +18,24 @@
                     <th>Camion</th>
                     <th>Destino</th>
                     <th>Pesaje</th>
+                    <th>Costo</th>
                     <th>Fecha</th>
                     <th>Usuario</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in pesajes %}
-                <!-- si se le saca la s se rompe por llamar al objeto real -->
+                {% for item in pesaje %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.id_generador }}</td>
-                    <td>{{ item.id_residuo }}</td>
-                    <td>{{ item.id_transportista }}</td>
-                    <td>{{ item.id_camion }}</td>
-                    <td>{{ item.id_destino}}</td>
-                    <td>{{ item.id_usuario }}</td>
-                    <td>{{ item.pesaje }}</td>
+                    <td>{{ item.id_generador }} - {{ item.nombre_generador }} </td>
+                    <td>{{ item.nombre_residuo}}</td>
+                    <td>{{ item.id_transportista}}</td>
+                    <td>{{ item.patente_camion }}</td>
+                    <td>{{ item.destino }}</td>
+                    <td>{{ item.pesaje}}</td>
+                    <td>{{ item.costo }}</td>
                     <td>{{ item.f_creacion }}</td>
-
+                    <td>{{ item.id_usuario }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

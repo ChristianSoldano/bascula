@@ -71,18 +71,25 @@ def FijarTara(request):
 
 def GuardarPesaje(request):
     if request.method == 'POST':
-        if "generador" and "residuos" and "transportista" and "camiones" and "destino" and "peso" in request.POST:
+        if "generador" and "residuos" and "transportista" and "camiones" and "destino" and "peso" and "tara" in request.POST:
             P = Pesaje(
-                    id_generador=Generador.objects.get(id=request.POST['generador']),
-                    id_residuo=Residuo.objects.get(id=request.POST['residuos']),
-                    id_transportista=Transportista.objects.get(codigo=request.POST['transportista']),
-                    id_camion=Camion.objects.get(id=request.POST['camiones']),
-                    id_destino=Destino.objects.get(id=request.POST['destino']), 
+                    id_generador=request.POST['generador'],
+                    id_residuo=request.POST['residuos'],
+                    nombre_residuo=Residuo.objects.get(id=request.POST['residuos']),
+                    nombre_generador= Generador.objects.get(id=request.POST['generador']),
+                    id_transportista=request.POST['transportista'],
+                    nombre_transportista="FALTA ESTO",
+                    id_camion=request.POST['camiones'],
+                    patente_camion = Camion.objects.get(id=request.POST['camiones']),
+                    id_destino=request.POST['destino'],
+                    destino = Destino.objects.get(id=request.POST['destino']),  
                     id_usuario=1,
-                    pesaje=request.POST["peso"],   
+                    pesaje=request.POST["peso"],  
+                    # costo= "(peso - tara) * costo del residuo",   
+                    costo = 2,
                     activo=1)
             P.save()
-        return
+        return print(P.id)
 def tablahistorial(request):
             ids = Pesaje.objects.filter(activo = 1).order_by('id')
             pesajes = []

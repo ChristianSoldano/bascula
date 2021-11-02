@@ -88,14 +88,20 @@ class Residuo(models.Model):
 
 class Pesaje(models.Model):
     id = models.AutoField(primary_key=True)
-    id_generador = models.ForeignKey(Generador, on_delete=models.PROTECT, blank=False, null=False )
-    id_residuo = models.ForeignKey(Residuo, on_delete=models.PROTECT, blank=False, null=False )
-    id_transportista = models.ForeignKey(Transportista, on_delete=models.PROTECT, blank=False, null=False )
-    id_camion = models.ForeignKey(Camion, on_delete=models.PROTECT, blank=False, null=False )
-    id_destino = models.ForeignKey(Destino, on_delete=models.PROTECT, blank=False, null=False )
+    id_generador = models.IntegerField(null=False, blank=False)
+    nombre_generador = models.CharField(max_length=250, blank=False, null=False)
+    id_residuo = models.IntegerField(null=False, blank=False)
+    nombre_residuo = models.CharField(max_length=250, blank=False, null=False)
+    id_transportista = models.IntegerField(null=False, blank=False)
+    nombre_transportista = models.CharField(max_length=250, blank=False, null=False)
+    id_camion = models.IntegerField(null=False, blank=False)
+    patente_camion= models.CharField(max_length=250, blank=False, null=False)
+    id_destino = models.CharField(max_length=250, blank=False, null=False)
+    destino = models.CharField(max_length=250, blank=False, null=False)
     """ id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT, blank=False, null=False ) """
     id_usuario = models.IntegerField(Usuario,null=False, blank=False, default=1)  
     pesaje = models.FloatField(null=False, blank=False)
+    costo = models.FloatField(null=False, blank=False)
     f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo =  models.IntegerField(null=False, blank=False, default=1)    
 
