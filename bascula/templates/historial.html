@@ -23,7 +23,8 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in pesajes %}<!-- si se le saca la s se rompe por llamar al objeto real -->
+                {% for item in pesajes %}
+                <!-- si se le saca la s se rompe por llamar al objeto real -->
                 <tr>
                     <td>{{ item.id }}</td>
                     <td>{{ item.id_generador }}</td>
@@ -36,7 +37,7 @@
                     <td>{{ item.f_creacion }}</td>
 
                 </tr>
-               {% endfor %}
+                {% endfor %}
             </tbody>
             <tfoot>
                 <tr>
@@ -54,15 +55,57 @@
         </table>
     </div>
 </div>
+
 {% endblock %}
 
 {% block javascript %}
 <script>
     $(document).ready(function () {
         var datatable = $("#mytable").DataTable({
-           /*  ajax: "ajax/tablahistorial",
-            columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "Transportista" },  { data: "Camion" },  { data: "Destino" },  { data: "Pesaje" },  { data: "Fecha" },  { data: "Usuario" }],    */
+            "dom": 'l<"clear"><"clear">frtBip',
+            /*  ajax: "ajax/tablahistorial",
+  columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "Transportista" },  { data: "Camion" },  { data: "Destino" },  { data: "Pesaje" },  { data: "Fecha" },  { data: "Usuario" }],    */
+            "language": {
+                "processing": '<i style="display: visible; color: #00f" class=" fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span>',
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "No se encontraron pesajes cargados",
+                "sInfo": "<span style='color: white'>Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros</span>",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _TOTAL_ registros )",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                }
+            },
+            "lengthMenu": [[10, 50, 100, 250, 500], [10, 50, 100, 250, 500]],
+            "buttons": [{
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [1, 2, 3, 4, 5, 6, 7, 8],
+                    orthogonal: 'export',
+                }
+            },
+                'csv', {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: [1, 2, 3, 4, 5, 6, 7, 8],
+                    orthogonal: 'export'
+                }
+            },
+
+            ],
         });
+        datatable.buttons().container()
+            .appendTo($('.col-sm-6:eq(0)', datatable.table().container()));
     });
+
 </script>
 {% endblock %}

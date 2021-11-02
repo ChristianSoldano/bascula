@@ -285,3 +285,35 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
     .left{ margin-left: 25%;
     }
 }
+
+.buttons-excel{
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50; /* Green */
+    transition-duration: 0.4s;
+}
+  .buttons-excel:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+  }
+
+  .buttons-csv{
+    background-color: white;
+    color: black;
+    border: 2px solid #af4c4c; /* Green */
+    transition-duration: 0.4s;
+}
+  .buttons-csv:hover {
+    background-color: #af4c4c; /* Green */
+    color: white;
+  }
+  .buttons-pdf{
+    background-color: white;
+    color: black;
+    border: 2px solid #614caf; /* Green */
+    transition-duration: 0.4s;
+}
+  .buttons-pdf:hover {
+    background-color: #614caf; /* Green */
+    color: white;
+  }
