@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block imports %}{% endblock %}
+
+{% block content %}
+<div class="row body">
+    <h1 class="text-center mt-5 titulo">Historial</h1>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <table id="mytable" class="display table responsive table-striped table-hover" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Generador</th>
+                    <th>Residuo</th>
+                    <th>Transportista</th>
+                    <th>Camion</th>
+                    <th>Destino</th>
+                    <th>Pesaje</th>
+                    <th>Costo</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pesaje %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id_generador }} - {{ item.nombre_generador }} </td>
+                    <td>{{ item.nombre_residuo}}</td>
+                    <td>{{ item.id_transportista}}</td>
+                    <td>{{ item.patente_camion }}</td>
+                    <td>{{ item.destino }}</td>
+                    <td>{{ item.pesaje}}</td>
+                    <td>{{ item.costo }}</td>
+                    <td>{{ item.f_creacion }}</td>
+                    <td>{{ item.id_usuario }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Generador</th>
+                    <th>Residuo</th>
+                    <th>Transportista</th>
+                    <th>Camion</th>
+                    <th>Destino</th>
+                    <th>Pesaje</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+        var datatable = $("#mytable").DataTable({
+            "order": [[ 1, "desc" ]],
+            "dom":
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                
+            /*  ajax: "ajax/tablahistorial",
+columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "Transportista" },  { data: "Camion" },  { data: "Destino" },  { data: "Pesaje" },  { data: "Fecha" },  { data: "Usuario" }],    */
+            "language": {
+                "processing": '<i style="display: visible; color: #00f" class=" fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span>',
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "No se encontraron pesajes cargados",
+                "sInfo": "<span style='color: white'>Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros</span>",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _TOTAL_ registros )",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                }
+            },
+            "lengthMenu": [[10, 50, 100, 250, 500], [10, 50, 100, 250, 500]],
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'EXCEL',
+                    title: 'Bascula'
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF'
+                },
+                {
+                    extend: 'csv',
+                    text: 'CSV'
+                },
+            ],
+        });
+        datatable.buttons().container()
+            .appendTo($('.col-sm-6:eq(0)', datatable.table().container()));
+    });
+
+</script>
+{% endblock %}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-11-2021 a las 15:43:47
+-- Tiempo de generación: 02-11-2021 a las 19:27:02
 -- Versión del servidor: 10.4.19-MariaDB
 -- Versión de PHP: 8.0.6
 
@@ -930,7 +930,7 @@ CREATE TABLE `generadores_residuos` (
 
 INSERT INTO `generadores_residuos` (`id`, `id_generador`, `id_residuo`, `activo`, `f_creacion`) VALUES
 (1, 2, 1, 1, '2021-10-31 14:20:30'),
-(2, 3, 2, 1, '2021-10-31 14:20:30'),
+(2, 2, 2, 1, '2021-10-31 14:20:30'),
 (3, 7, 1, 1, '2021-10-31 14:20:32'),
 (4, 3, 1, 1, '2021-10-31 14:20:32');
 
@@ -944,14 +944,50 @@ CREATE TABLE `pesajes` (
   `id` int(100) NOT NULL,
   `id_generador` int(100) NOT NULL,
   `id_residuo` int(100) NOT NULL,
+  `nombre_residuo` varchar(250) NOT NULL,
+  `nombre_generador` varchar(250) NOT NULL,
   `id_transportista` int(100) NOT NULL,
+  `nombre_transportista` varchar(250) NOT NULL,
   `id_camion` int(100) NOT NULL,
+  `patente_camion` varchar(250) NOT NULL,
   `id_destino` int(100) NOT NULL,
+  `destino` varchar(250) NOT NULL,
   `pesaje` double NOT NULL,
+  `costo` double NOT NULL,
   `f_creacion` datetime NOT NULL DEFAULT current_timestamp(),
   `id_usuario` int(100) NOT NULL,
   `activo` int(2) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pesajes`
+--
+
+INSERT INTO `pesajes` (`id`, `id_generador`, `id_residuo`, `nombre_residuo`, `nombre_generador`, `id_transportista`, `nombre_transportista`, `id_camion`, `patente_camion`, `id_destino`, `destino`, `pesaje`, `costo`, `f_creacion`, `id_usuario`, `activo`) VALUES
+(1, 2, 1, '', '', 50001, '', 180, '', 1, '', 9000, 0, '2021-11-02 09:47:20', 1, 1),
+(2, 2, 1, '', '', 50002, '', 130, '', 2, '', 9033, 0, '2021-11-02 09:47:29', 2, 1),
+(3, 2, 1, 'Domiciliario', '', 10024, '', 180, '', 0, '', 123123, 1, '2021-11-02 17:33:31', 1, 1),
+(4, 2, 1, 'Árido', '', 10024, '', 180, '', 0, '', 123123, 1, '2021-11-02 17:34:21', 1, 1),
+(5, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, '', 180, '', 0, '', 123123, 1, '2021-11-02 17:35:05', 1, 1),
+(6, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, '', 180, 'HHX359', 0, '', 123123, 1, '2021-11-02 17:38:23', 1, 1),
+(7, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, '', 180, 'HHX359', 1, 'CDFR\r\n', 123123, 1, '2021-11-02 17:39:31', 1, 1),
+(8, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 1, 'CDFR\r\n', 123123, 1, '2021-11-02 17:56:22', 1, 1),
+(9, 2, 2, 'Domiciliario', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 3, 'OSSE', 12312321, 2, '2021-11-02 18:07:16', 1, 1),
+(10, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:17', 1, 1),
+(11, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:17', 1, 1),
+(12, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:17', 1, 1),
+(13, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:18', 1, 1),
+(14, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:18', 1, 1),
+(15, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:18', 1, 1),
+(16, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:18', 1, 1),
+(17, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:18', 1, 1),
+(18, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:18', 1, 1),
+(19, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:19', 1, 1),
+(20, 2, 1, 'Árido', 'PEPSICO DE ARGENTINA S.A.', 10024, 'FALTA ESTO', 180, 'HHX359', 2, 'PLANTA SOCIAL\r\n', 31232132, 2, '2021-11-02 18:16:19', 1, 1),
+(21, 7, 1, 'Árido', 'SISTEMAS AMBIENTALES S.A.', 10059, 'FALTA ESTO', 144, 'DME917', 3, 'OSSE', 7009, 2, '2021-11-02 18:24:12', 1, 1),
+(22, 7, 1, 'Árido', 'SISTEMAS AMBIENTALES S.A.', 10059, 'FALTA ESTO', 144, 'DME917', 3, 'OSSE', 70099999, 2, '2021-11-02 18:24:32', 1, 1),
+(23, 7, 1, 'Árido', 'SISTEMAS AMBIENTALES S.A.', 10059, 'FALTA ESTO', 144, 'DME917', 3, 'OSSE', 70099999798797, 2, '2021-11-02 18:24:36', 1, 1),
+(24, 7, 1, 'Árido', 'SISTEMAS AMBIENTALES S.A.', 10059, 'FALTA ESTO', 144, 'DME917', 3, 'OSSE', 70989, 2, '2021-11-02 18:25:15', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1296,7 +1332,7 @@ ALTER TABLE `generadores_residuos`
 -- AUTO_INCREMENT de la tabla `pesajes`
 --
 ALTER TABLE `pesajes`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `residuos`

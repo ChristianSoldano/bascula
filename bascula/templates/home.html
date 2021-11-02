@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class="row body">
-    <h1 class="text-center mt-5">Pesaje</h1>
+    <h1 class="text-center mt-5 titulo">Pesaje</h1>
     <div class="col-sm-3"></div>
     <div class="col-sm-6">
         <label>Generadores</label><br>
@@ -174,6 +174,7 @@
                     camiones: $("#camiones").val(),
                     destino: $("#destino").val(),
                     peso: $('#peso').val(),
+                    tara: $('#tara').val(),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 }
             }).done(function (data) {
