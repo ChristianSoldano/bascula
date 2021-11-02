@@ -255,15 +255,33 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
     width: 50px;
 }
 
-.left{
-    margin-left: 85%;
-}
-
-@media only screen and (max-width: 799px) {
-    .left{ margin-left: 60%;
+@media only screen and (max-width: 1800px) {
+    .left{ margin-left: 85%;
     }
 }
-@media only screen and (max-width: 699px) {
-    .left{ margin-left: 45%;
+
+@media only screen and (max-width: 1400px) {
+    .left{ margin-left: 80%;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .left{ margin-left: 75%;
+    }
+}
+@media only screen and (max-width: 1000px) {
+    .left{ margin-left: 70%;
+    }
+}
+@media only screen and (max-width: 800px) {
+    .left{ margin-left: 65%;
+    }
+}
+@media only screen and (max-width: 700px) {
+    .left{ margin-left: 55%;
+    }
+}
+@media only screen and (max-width: 500px) {
+    .left{ margin-left: 25%;
     }
 }

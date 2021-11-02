@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block imports %}{% endblock %}
+
+{% block content %}
+<div class="row body">
+    <h1 class="text-center mt-5">Historial</h1>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <table id="mytable" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Generador</th>
+                    <th>Residuo</th>
+                    <th>Transportista</th>
+                    <th>Camion</th>
+                    <th>Destino</th>
+                    <th>Pesaje</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pesajes %}<!-- si se le saca la s se rompe por llamar al objeto real -->
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.id_generador }}</td>
+                    <td>{{ item.id_residuo }}</td>
+                    <td>{{ item.id_transportista }}</td>
+                    <td>{{ item.id_camion }}</td>
+                    <td>{{ item.id_destino}}</td>
+                    <td>{{ item.id_usuario }}</td>
+                    <td>{{ item.pesaje }}</td>
+                    <td>{{ item.f_creacion }}</td>
+
+                </tr>
+               {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Generador</th>
+                    <th>Residuo</th>
+                    <th>Transportista</th>
+                    <th>Camion</th>
+                    <th>Destino</th>
+                    <th>Pesaje</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+        var datatable = $("#mytable").DataTable({
+           /*  ajax: "ajax/tablahistorial",
+            columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "Transportista" },  { data: "Camion" },  { data: "Destino" },  { data: "Pesaje" },  { data: "Fecha" },  { data: "Usuario" }],    */
+        });
+    });
+</script>
+{% endblock %}

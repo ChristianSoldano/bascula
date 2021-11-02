@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}" type="text/css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     {% block imports%} {% endblock %}
 </head>
 
@@ -20,8 +21,9 @@
     <!-- NAV -->
     <nav>
         <div class="w3-bar w3-black nav">
-            <a href="../home" class="w3-bar-item w3-button left"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
-            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog fa-2x" aria-hidden="true"></i></a>
+            <a href="../" class="w3-bar-item w3-button left"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
+            <a href="/admin" class="w3-bar-item w3-button"><i class="fa fa-cog fa-2x" aria-hidden="true"></i></a>
+            <a href="/historial" class="w3-bar-item w3-button"><i class="fa fa-truck fa-2x" aria-hidden="true"></i></a>
             <a href="#" class="w3-bar-item w3-button"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
         </div>
     </nav>
@@ -41,6 +43,7 @@
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap-select.min.js' %}"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     {% block javascript %}{% endblock%}
 </body>
 

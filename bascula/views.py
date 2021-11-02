@@ -21,6 +21,23 @@ def home(request):
         'destinos': destinos
         })
 
+def historial(request):
+    generadores = Generador.objects.all()
+    residuos = Residuo.objects.all().order_by('residuo')
+    transportistas = Transportista.objects.all().order_by('codigo')
+    camiones = Camion.objects.all().order_by('patente')
+    destinos = Destino.objects.all().order_by('destino')
+    pesajes = Pesaje.objects.all().order_by('id')
+    return render(request, "historial.html",
+        {'generadores': generadores, 
+        'residuos': residuos, 
+        'transportistas': transportistas,
+        'camiones': camiones,
+        'destinos': destinos,
+        'pesaje':pesajes
+        })
+   
+
 def GetResiduosbyIdGenerador(request):
     if request.method == 'POST':
         if "idGenerador" in request.POST:
@@ -66,3 +83,19 @@ def GuardarPesaje(request):
                     activo=1)
             P.save()
         return
+def tablahistorial(request):
+            ids = Pesaje.objects.filter(activo = 1).order_by('id')
+            pesajes = []
+            for item in ids:
+                pesajes.append({'id': item.id, 
+                'generador': item.id_generador,
+                'residuo': item.id_residuo,
+                'transportista': item.id_transportista,
+                'camion': item.id_camion,
+                'destino': item.id_destino,
+                'pesaje': item.pesaje,
+                'fecha': item.f_creacion,
+                'usuario': item.id_usuario})
+            return HttpResponse(json.dumps(pesajes), content_type='application/json') 
+    
+        
