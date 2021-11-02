@@ -27,7 +27,7 @@ def historial(request):
     transportistas = Transportista.objects.all().order_by('codigo')
     camiones = Camion.objects.all().order_by('patente')
     destinos = Destino.objects.all().order_by('destino')
-    pesajes = Pesaje.objects.all().order_by('id')
+    pesajes = Pesaje.objects.all().order_by('-id')
     return render(request, "historial.html",
         {'generadores': generadores, 
         'residuos': residuos, 
