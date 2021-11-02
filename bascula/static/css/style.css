@@ -236,6 +236,13 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 
 .nav {
     height: 50px;
+    position: fixed;
+    position: fixed; /*Fixed ya que queremos que la posición sea en relación al navegador*/
+    top: 0; /*El valor 0 indica que va a quedar arriba de todo*/
+    left: 0; /*Para que el menu se ubique siempre en la parte izquierda de la pantalla*/
+    right: 0;
+    width: 100%; /*100% para que ocupe todo el ancho del navegador*/
+    z-index: 1;
 }
 .footer {
     position: fixed;
@@ -246,6 +253,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
     color: white;
     text-align: center;
     height: 100px;
+    z-index: 1;
  }
 
  .body{
@@ -254,43 +262,60 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .logo{
     width: 50px;
 }
+.titulo{
+    margin-top: 100px !important;
+}
 
-@media only screen and (max-width: 1800px) {
+@media only screen and (max-width: 3000px) {
     .left{ margin-left: 85%;
+        width: 100%;
     }
 }
 
 @media only screen and (max-width: 1400px) {
     .left{ margin-left: 80%;
+        width: 100%;
     }
 }
 
 @media only screen and (max-width: 1200px) {
     .left{ margin-left: 75%;
+        width: 100%;
     }
 }
 @media only screen and (max-width: 1000px) {
     .left{ margin-left: 70%;
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 900px) {
+    .left{ margin-left: 68%;
+        width: 100%;
     }
 }
 @media only screen and (max-width: 800px) {
     .left{ margin-left: 65%;
+        width: 100%;
     }
 }
 @media only screen and (max-width: 700px) {
     .left{ margin-left: 55%;
+        width: 100%;
     }
 }
 @media only screen and (max-width: 500px) {
-    .left{ margin-left: 25%;
+    .left{ margin-left: 35%;
+        width: 100%;
     }
 }
+
 
 .buttons-excel{
     background-color: white;
     color: black;
     border: 2px solid #4CAF50; /* Green */
     transition-duration: 0.4s;
+    
 }
   .buttons-excel:hover {
     background-color: #4CAF50; /* Green */
@@ -302,6 +327,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
     color: black;
     border: 2px solid #af4c4c; /* Green */
     transition-duration: 0.4s;
+   
 }
   .buttons-csv:hover {
     background-color: #af4c4c; /* Green */
@@ -312,6 +338,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
     color: black;
     border: 2px solid #614caf; /* Green */
     transition-duration: 0.4s;
+   
 }
   .buttons-pdf:hover {
     background-color: #614caf; /* Green */

@@ -5,10 +5,10 @@
 
 {% block content %}
 <div class="row body">
-    <h1 class="text-center mt-5">Historial</h1>
+    <h1 class="text-center mt-5 titulo">Historial</h1>
     <div class="col-sm-3"></div>
     <div class="col-sm-6">
-        <table id="mytable" class="display" cellspacing="0" width="100%">
+        <table id="mytable" class="display responsive" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -62,9 +62,13 @@
 <script>
     $(document).ready(function () {
         var datatable = $("#mytable").DataTable({
-            "dom": 'l<"clear"><"clear">frtBip',
+            "dom":
+                "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             /*  ajax: "ajax/tablahistorial",
-  columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "Transportista" },  { data: "Camion" },  { data: "Destino" },  { data: "Pesaje" },  { data: "Fecha" },  { data: "Usuario" }],    */
+columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "Transportista" },  { data: "Camion" },  { data: "Destino" },  { data: "Pesaje" },  { data: "Fecha" },  { data: "Usuario" }],    */
             "language": {
                 "processing": '<i style="display: visible; color: #00f" class=" fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span>',
                 "sLengthMenu": "Mostrar _MENU_ registros",
@@ -86,21 +90,20 @@
                 }
             },
             "lengthMenu": [[10, 50, 100, 250, 500], [10, 50, 100, 250, 500]],
-            "buttons": [{
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [1, 2, 3, 4, 5, 6, 7, 8],
-                    orthogonal: 'export',
-                }
-            },
-                'csv', {
-                extend: 'pdf',
-                exportOptions: {
-                    columns: [1, 2, 3, 4, 5, 6, 7, 8],
-                    orthogonal: 'export'
-                }
-            },
-
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'EXCEL',
+                    title: 'Bascula'
+                },
+                {
+                    extend: 'pdf',
+                    text: 'PDF'
+                },
+                {
+                    extend: 'csv',
+                    text: 'CSV'
+                },
             ],
         });
         datatable.buttons().container()
