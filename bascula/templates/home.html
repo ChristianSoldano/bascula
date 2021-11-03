@@ -24,7 +24,8 @@
             <h1 class="text-center mt-5 titulo">Pesaje</h1>
             <div class="form-group mb-3">
                 <label class="form-label">Generadores</label>
-                <select class="form-control selectpicker" id="generador" title="Seleccione generador" data-live-search="true">
+                <select class="form-control selectpicker" id="generador" title="Seleccione generador"
+                    data-live-search="true">
                     {% for item in generadores %}
                     <option value="{{item.id}}">CUIT: {{item.cuit}} | {{item.nombre}}</option>
                     {% endfor %}
@@ -32,7 +33,8 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Residuos</label>
-                <select class="form-control selectpicker" disabled id="residuo" title="Seleccione residuo" data-live-search="true"></select>
+                <select class="form-control selectpicker" disabled id="residuo" title="Seleccione residuo"
+                    data-live-search="true"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Transportistas</label>
@@ -45,11 +47,13 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Camiones</label>
-                <select class="form-control selectpicker" disabled id="camion" title="Seleccione camión" data-live-search="true"></select>
+                <select class="form-control selectpicker" disabled id="camion" title="Seleccione camión"
+                    data-live-search="true"></select>
             </div>
             <div class="mb-3">
                 <label class="form-label">Destinos</label>
-                <select class="form-control selectpicker" id="destino" title="Seleccione destino" data-live-search="true">
+                <select class="form-control selectpicker" id="destino" title="Seleccione destino"
+                    data-live-search="true">
                     {% for item in destinos %}
                     <option value="{{item.id}}">{{item.nombre}}</option>
                     {% endfor %}
@@ -86,17 +90,16 @@
                 idGenerador,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             }
-        }).done(function(data){
-            
+        }).done(function (data) {
             const residuo = $("#residuo");
             residuo.html('');
             residuo.attr("disabled", false);
             residuo.attr("placeholder", "Seleccione residuo");
-            if(data.length != 0){
+            if (data.length != 0) {
                 data.forEach(element => {
                     residuo.append(`<option value="${element.id}">${element.nombre}</option>`);
                 });
-            }else{
+            } else {
                 residuo.append('<option disabled value="0">No se encontraron resultados</option>');
                 residuo.attr("placeholder", "No se encontraron resultados");
                 residuo.attr("disabled", true);
@@ -106,7 +109,7 @@
         });
     });
 
-    $("#residuo").change(function(){
+    $("#residuo").change(function () {
         checkFields();
     });
 
@@ -120,16 +123,17 @@
                 idTransportista,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             }
-        }).done(function(data){            
+        }).done(function (data) {
+            console.log(data);
             const camion = $("#camion");
             camion.html('');
             camion.attr("disabled", false);
             camion.attr("placeholder", "Seleccione camion");
-            if(data.length != 0){
+            if (data.length != 0) {
                 data.forEach(element => {
                     camion.append(`<option value="${element.id}">${element.patente}</option>`);
                 });
-            }else{
+            } else {
                 camion.append('<option disabled value="0">No se encontraron resultados</option>');
                 camion.attr("placeholder", "No se encontraron resultados");
                 camion.attr("disabled", true);
@@ -151,8 +155,8 @@
                 idCamion,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             }
-        }).done(function(data){  
-            if(data){
+        }).done(function (data) {
+            if (data) {
                 $("#tara").val(data.tara);
                 $("#peso").attr("disabled", false);
             }
@@ -160,18 +164,18 @@
         });
     });
 
-    $("#peso").keyup(function(){            
-        if(parseInt($(this).val()) <= parseInt($("#tara").val())){
+    $("#peso").keyup(function () {
+        if (parseInt($(this).val()) <= parseInt($("#tara").val())) {
             $(this).removeClass("border-success");
             $(this).addClass("border-danger");
-        }else{
+        } else {
             $(this).removeClass("border-danger");
             $(this).addClass("border-success");
         }
         checkFields();
     });
 
-    $("#destino").change(function(){
+    $("#destino").change(function () {
         checkFields();
     });
 
@@ -188,36 +192,36 @@
             return false;
         }
     });
-    
-    $("#limpiar").click(function(){
+
+    $("#limpiar").click(function () {
         $("#generador").val('');
         $("#residuo").html('');
-        $("#residuo").attr("disabled", true);        
+        $("#residuo").attr("disabled", true);
         $("#transportista").val('');
         $("#camion").html('');
-        $("#camion").attr("disabled", true);             
+        $("#camion").attr("disabled", true);
         $("#destino").val('');
         $("#peso").val('');
         $("#peso").removeClass("border-success");
-        $("#peso").removeClass("border-danger");             
+        $("#peso").removeClass("border-danger");
         $('#tara').val('');
         $('.selectpicker').selectpicker("refresh");
     });
 
-    function checkFields(){
-        if($("#generador").val() != 0 &&
-        $("#residuo").val() != 0 &&
-        $("#transportista").val() != 0 &&
-        $("#camion").val() != 0 && 
-        $("#destino").val() != 0 &&
-        (parseInt($("#peso").val()) > parseInt($("#tara").val()))){
+    function checkFields() {
+        if ($("#generador").val() != 0 &&
+            $("#residuo").val() != 0 &&
+            $("#transportista").val() != 0 &&
+            $("#camion").val() != 0 &&
+            $("#destino").val() != 0 &&
+            (parseInt($("#peso").val()) > parseInt($("#tara").val()))) {
             $("#enviar").attr("disabled", false);
-        }else{
+        } else {
             $("#enviar").attr("disabled", true);
-        }     
+        }
     }
 
-    $("#enviar").click(function(){
+    $("#enviar").click(function () {
         $.ajax({
             url: "/ajax/GuardarPesaje",
             type: "post",
@@ -227,10 +231,10 @@
                 transportista: $("#transportista").val(),
                 camion: $("#camion").val(),
                 destino: $("#destino").val(),
-                peso: $("#peso").val(),                
+                peso: $("#peso").val(),
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             }
-        }).done(function(data){  
+        }).done(function (data) {
 
         });
     });
