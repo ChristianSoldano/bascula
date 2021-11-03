@@ -1,76 +1,77 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block imports %}{% endblock %}
+{% block imports %}
+{% endblock %}
 
 {% block content %}
-<div class="row body">
-    <h1 class="text-center mt-5 titulo">Historial</h1>
-    <div class="col-sm-3"></div>
-    <div class="col-sm-6">
-        <table id="mytable" class="display table responsive table-striped table-hover" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Generador</th>
-                    <th>Residuo</th>
-                    <th>Transportista</th>
-                    <th>Camion</th>
-                    <th>Destino</th>
-                    <th>Pesaje</th>
-                    <th>Costo</th>
-                    <th>Fecha</th>
-                    <th>Usuario</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in pesaje %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.id_generador }} - {{ item.nombre_generador }} </td>
-                    <td>{{ item.nombre_residuo}}</td>
-                    <td>{{ item.id_transportista}}</td>
-                    <td>{{ item.patente_camion }}</td>
-                    <td>{{ item.destino }}</td>
-                    <td>{{ item.pesaje}}</td>
-                    <td>{{ item.costo }}</td>
-                    <td>{{ item.f_creacion }}</td>
-                    <td>{{ item.id_usuario }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>ID</th>
-                    <th>Generador</th>
-                    <th>Residuo</th>
-                    <th>Transportista</th>
-                    <th>Camion</th>
-                    <th>Destino</th>
-                    <th>Pesaje</th>
-                    <th>Fecha</th>
-                    <th>Usuario</th>
-                </tr>
-            </tfoot>
-        </table>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-8">
+            <h1 class="text-center mt-5 titulo">Historial</h1>
+            <table id="mytable" class="display table responsive table-striped table-hover" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Generador</th>
+                        <th>Residuo</th>
+                        <th>Transportista</th>
+                        <th>Camion</th>
+                        <th>Destino</th>
+                        <th>Pesaje</th>
+                        <th>Costo</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in pesaje %}
+                    <tr>
+                        <td>{{ item.id}}</td>
+                        <td>{{ item.fcreacion }}</td>
+                        <td>{{ item.generador }} </td>
+                        <td>{{ item.residuo}}</td>
+                        <td>{{ item.transportista}}</td>
+                        <td>{{ item.camion }}</td>
+                        <td>{{ item.destino }}</td>
+                        <td>{{ item.pesaje}}</td>
+                        <td>{{ item.costo }}</td>
+                        <td>{{ item.id_usuario }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Generador</th>
+                        <th>Residuo</th>
+                        <th>Transportista</th>
+                        <th>Camion</th>
+                        <th>Destino</th>
+                        <th>Pesaje</th>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block javascript %}
 <script>
     $(document).ready(function () {
         var datatable = $("#mytable").DataTable({
-            "order": [[ 1, "desc" ]],
             "dom":
                 "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
                 "<'row'<'col-sm-12'B>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                
-            /*  ajax: "ajax/tablahistorial",
-columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "Transportista" },  { data: "Camion" },  { data: "Destino" },  { data: "Pesaje" },  { data: "Fecha" },  { data: "Usuario" }],    */
             "language": {
                 "processing": '<i style="display: visible; color: #00f" class=" fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span>',
                 "sLengthMenu": "Mostrar _MENU_ registros",
@@ -96,15 +97,17 @@ columns: [{ data: "ID" }, { data: "Generador" }, { data: "Residuo" }, { data: "T
                 {
                     extend: 'excel',
                     text: 'EXCEL',
-                    title: 'Bascula'
+                    title: '{{fecha}}'
                 },
                 {
                     extend: 'pdf',
-                    text: 'PDF'
+                    text: 'PDF',
+                    title: '{{fecha}}'
                 },
                 {
                     extend: 'csv',
-                    text: 'CSV'
+                    text: 'CSV',
+                    title: '{{fecha}}'
                 },
             ],
         });

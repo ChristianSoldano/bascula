@@ -2,16 +2,18 @@ from django.shortcuts import render
 from django.http import *
 from bascula.models import *
 import json
+from datetime import date
+import datetime
 
 def login(request):
     return render(request, "login.html")
 
 def home(request):
-    generadores = Generador.objects.all()
-    residuos = Residuo.objects.all().order_by('nombre')
-    transportistas = Transportista.objects.all().order_by('codigo')
-    camiones = Camion.objects.all().order_by('patente')
-    destinos = Destino.objects.all().order_by('nombre')
+    generadores = Generador.objects.all().filter(activo=1)
+    residuos = Residuo.objects.all().order_by('nombre').filter(activo=1)
+    transportistas = Transportista.objects.all().order_by('codigo').filter(activo=1)
+    camiones = Camion.objects.all().order_by('patente').filter(activo=1)
+    destinos = Destino.objects.all().order_by('nombre').filter(activo=1)
     return render(request, "home.html",
                   {'generadores': generadores,
                    'residuos': residuos,
@@ -21,19 +23,21 @@ def home(request):
                    })
 
 def historial(request):
-    generadores = Generador.objects.all()
-    residuos = Residuo.objects.all().order_by('residuo')
-    transportistas = Transportista.objects.all().order_by('codigo')
-    camiones = Camion.objects.all().order_by('patente')
-    destinos = Destino.objects.all().order_by('destino')
-    pesajes = Pesaje.objects.all().order_by('-id')
+    generadores = Generador.objects.all().filter(activo=1)
+    residuos = Residuo.objects.all().order_by('residuo').filter(activo=1)
+    transportistas = Transportista.objects.all().order_by('codigo').filter(activo=1)
+    camiones = Camion.objects.all().order_by('patente').filter(activo=1)
+    destinos = Destino.objects.all().order_by('destino').filter(activo=1)
+    pesajes = Pesaje.objects.all().filter(activo=1).order_by('-id')
+    date = datetime.datetime.now
     return render(request, "historial.html",
                   {'generadores': generadores,
                    'residuos': residuos,
                    'transportistas': transportistas,
                    'camiones': camiones,
                    'destinos': destinos,
-                   'pesaje': pesajes
+                   'pesaje': pesajes,
+                   'fecha': date
                    })
 
 def GetResiduosbyIdGenerador(request):
@@ -94,21 +98,6 @@ def GuardarPesaje(request):
             return HttpResponse(status=200)
         else:
             return HttpResponseBadRequest()
-
-def tablahistorial(request):
-    ids = Pesaje.objects.filter(activo=1).order_by('id')
-    pesajes = []
-    for item in ids:
-        pesajes.append({'id': item.id,
-                        'generador': item.id_generador,
-                        'residuo': item.id_residuo,
-                        'transportista': item.id_transportista,
-                        'camion': item.id_camion,
-                        'destino': item.id_destino,
-                        'pesaje': item.pesaje,
-                        'fecha': item.f_creacion,
-                        'usuario': item.id_usuario})
-    return HttpResponse(json.dumps(pesajes), content_type='application/json')
 
 def testing(request):
     generador = Generador.objects.filter(id=1)

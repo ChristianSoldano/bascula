@@ -9,6 +9,5 @@ urlpatterns = [
     path('ajax/GetCamionbyIdTransportista', GetCamionbyIdTransportista, name="GetCamionbyIdTransportista"),
     path('ajax/getTara', getTara, name="FijarTara"),
     path('ajax/GuardarPesaje', GuardarPesaje, name="GuardarPesaje"),
-    path('ajax/tablahistorial', tablahistorial, name="tablahistorial"),
     path('testing/', testing, name="GuardarPesaje")
     ]
