@@ -6,8 +6,9 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('historial/', historial, name='historial'),
     path('ajax/GetResiduosbyIdGenerador', GetResiduosbyIdGenerador, name="ResiduosPorGenerador"),
-    path('ajax/GetVehiculobyIdTransportista', GetVehiculobyIdTransportista, name="GetVehiculobyIdTransportista"),
-    path('ajax/FijarTara', FijarTara, name="FijarTara"),
+    path('ajax/GetCamionbyIdTransportista', GetCamionbyIdTransportista, name="GetCamionbyIdTransportista"),
+    path('ajax/getTara', getTara, name="FijarTara"),
     path('ajax/GuardarPesaje', GuardarPesaje, name="GuardarPesaje"),
     path('ajax/tablahistorial', tablahistorial, name="tablahistorial"),
+    path('testing/', testing, name="GuardarPesaje")
     ]

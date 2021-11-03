@@ -8,18 +8,17 @@ def login(request):
 
 def home(request):
     generadores = Generador.objects.all()
-    residuos = Residuo.objects.all().order_by('residuo')
+    residuos = Residuo.objects.all().order_by('nombre')
     transportistas = Transportista.objects.all().order_by('codigo')
     camiones = Camion.objects.all().order_by('patente')
-    destinos = Destino.objects.all().order_by('destino')
-
+    destinos = Destino.objects.all().order_by('nombre')
     return render(request, "home.html",
-        {'generadores': generadores, 
-        'residuos': residuos, 
-        'transportistas': transportistas,
-        'camiones': camiones,
-        'destinos': destinos
-        })
+                  {'generadores': generadores,
+                   'residuos': residuos,
+                   'transportistas': transportistas,
+                   'camiones': camiones,
+                   'destinos': destinos
+                   })
 
 def historial(request):
     generadores = Generador.objects.all()
@@ -29,80 +28,91 @@ def historial(request):
     destinos = Destino.objects.all().order_by('destino')
     pesajes = Pesaje.objects.all().order_by('-id')
     return render(request, "historial.html",
-        {'generadores': generadores, 
-        'residuos': residuos, 
-        'transportistas': transportistas,
-        'camiones': camiones,
-        'destinos': destinos,
-        'pesaje':pesajes
-        })
-   
+                  {'generadores': generadores,
+                   'residuos': residuos,
+                   'transportistas': transportistas,
+                   'camiones': camiones,
+                   'destinos': destinos,
+                   'pesaje': pesajes
+                   })
 
 def GetResiduosbyIdGenerador(request):
-    if request.method == 'POST':
-        if "idGenerador" in request.POST:
-            ids = GeneradoresResiduos.objects.filter(id_generador = request.POST["idGenerador"])
+    if request.method == 'GET':
+        if "idGenerador" in request.GET:           
+            ids = GeneradoresResiduos.objects.filter(generador = request.GET["idGenerador"])
             residuos = []
             for item in ids:
-                r = Residuo.objects.get(id=item.id_residuo.id)
-                residuos.append({'id': r.id, 'residuo': r.residuo})
+                r = Residuo.objects.get(id = item.residuo.id)
+                residuos.append(r.toJson())
+            residuos.sort(key = lambda x:x["nombre"])
             return HttpResponse(json.dumps(residuos), content_type='application/json')
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseNotFound()
 
-def GetVehiculobyIdTransportista(request):
-    if request.method == 'POST':
-        if "idTransportista" in request.POST:
-            ids = Camion.objects.filter(id_transportista = request.POST["idTransportista"]).order_by('patente')
+def GetCamionbyIdTransportista(request):
+    if request.method == 'GET':
+        if "idTransportista" in request.GET:
+            ids = Camion.objects.filter(transportista=request.GET["idTransportista"]).order_by('patente')
             camiones = []
             for item in ids:
-                camiones.append({'id': item.id, 'patente': item.patente})
+                camiones.append(item.toJson())
             return HttpResponse(json.dumps(camiones), content_type='application/json')
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseNotFound()
 
-def FijarTara(request):
-    if request.method == 'POST':
-        if "idPatente" in request.POST:
-            ids = Camion.objects.get(id = request.POST["idPatente"])
-        return HttpResponse(json.dumps(ids.tara), content_type='application/json')
+def getTara(request):
+    if request.method == 'GET':
+        if "idCamion" in request.GET:
+            camion = Camion.objects.get(id=request.GET["idCamion"])
+        return HttpResponse(json.dumps({'tara': camion.tara}), content_type='application/json')
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseNotFound()
 
 def GuardarPesaje(request):
     if request.method == 'POST':
-        if "generador" and "residuos" and "transportista" and "camiones" and "destino" and "peso" and "tara" in request.POST:
-            P = Pesaje(
-                    id_generador=request.POST['generador'],
-                    id_residuo=request.POST['residuos'],
-                    nombre_residuo=Residuo.objects.get(id=request.POST['residuos']),
-                    nombre_generador= Generador.objects.get(id=request.POST['generador']),
-                    id_transportista=request.POST['transportista'],
-                    nombre_transportista="FALTA ESTO",
-                    id_camion=request.POST['camiones'],
-                    patente_camion = Camion.objects.get(id=request.POST['camiones']),
-                    id_destino=request.POST['destino'],
-                    destino = Destino.objects.get(id=request.POST['destino']),  
-                    id_usuario=1,
-                    pesaje=request.POST["peso"],  
-                    # costo= "(peso - tara) * costo del residuo",   
-                    costo = 2,
-                    activo=1)
-            P.save()
-        return print(P.id)
+        if "generador" and "residuo" and "transportista" and "camion" and "destino" and "peso" in request.POST:
+            generador = Generador.objects.filter(id=request.POST['generador'])
+            residuo = Residuo.objects.filter(id=request.POST['residuo'])
+            transportista = Transportista.objects.filter(codigo=request.POST['transportista'])
+            camion = Camion.objects.filter(id=request.POST['camion'])
+            destino = Destino.objects.filter(id=request.POST['destino'])
+            peso = request.POST['peso']
+            print(request.POST['transportista']) 
+            if not generador.exists() or not residuo.exists() or not transportista.exists() or not camion.exists() or not destino.exists():
+                return HttpResponseBadRequest()     
+                    
+            Pesaje(
+                generador = generador.first().nombre,
+                residuo = residuo.first().nombre,
+                transportista = transportista.first().nombre,
+                camion = camion.first().patente,
+                destino = destino.first().nombre,
+                pesaje = peso,
+                costo = ((float(peso) - camion.first().tara) * residuo.first().costo_tonelada),
+                id_usuario = 1 #TODO CAMBIAR POR IDUSUARIO FK
+            ).save()
+            return HttpResponse(status=200)
+        else:
+            return HttpResponseBadRequest()
+
 def tablahistorial(request):
-            ids = Pesaje.objects.filter(activo = 1).order_by('id')
-            pesajes = []
-            for item in ids:
-                pesajes.append({'id': item.id, 
-                'generador': item.id_generador,
-                'residuo': item.id_residuo,
-                'transportista': item.id_transportista,
-                'camion': item.id_camion,
-                'destino': item.id_destino,
-                'pesaje': item.pesaje,
-                'fecha': item.f_creacion,
-                'usuario': item.id_usuario})
-            return HttpResponse(json.dumps(pesajes), content_type='application/json') 
-    
-        
+    ids = Pesaje.objects.filter(activo=1).order_by('id')
+    pesajes = []
+    for item in ids:
+        pesajes.append({'id': item.id,
+                        'generador': item.id_generador,
+                        'residuo': item.id_residuo,
+                        'transportista': item.id_transportista,
+                        'camion': item.id_camion,
+                        'destino': item.id_destino,
+                        'pesaje': item.pesaje,
+                        'fecha': item.f_creacion,
+                        'usuario': item.id_usuario})
+    return HttpResponse(json.dumps(pesajes), content_type='application/json')
+
+def testing(request):
+    generador = Generador.objects.filter(id=1)
+    if not generador.exists():
+        return HttpResponse("NO EXISTE")
+    else:
+        return HttpResponse("EXISTE")

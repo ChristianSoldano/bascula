@@ -1,7 +1,8 @@
+from django import db
 from django.db import models
 from django.contrib.auth.models import User
 
-class Usuario(User):
+class Usuario(User):    
     created_at = models.DateField(auto_now=True, blank=False, null=False)
     updated_at = models.DateField(auto_now=True, blank=False, null=False)
 
@@ -11,14 +12,15 @@ class Usuario(User):
 
 class Generador(models.Model):    
     id = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=250, blank=False, null=False)
-    cuit = models.CharField(max_length=100, blank=False, null=False)
-    nombre_fantasia = models.CharField(max_length=250, blank=False, null=False)
-    f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
-    activo =  models.IntegerField(null=False, blank=False)
+    nombre = models.CharField(max_length=255, blank=False, null=False)
+    nombre_fantasia = models.CharField(max_length=255, blank=False, null=False)
+    cuit = models.CharField(max_length=13, blank=False, null=False)
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
 
-    def __str__(self):
-        return self.nombre
+    def toJson(self):
+        return {'id': self.id, 'nombre': self.nombre, 'cuit': self.cuit, 'nombre_fantasia': self.nombre_fantasia, 
+        'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
 
     class Meta:
         verbose_name_plural = "Generadores"
@@ -27,15 +29,16 @@ class Generador(models.Model):
 
 class Transportista(models.Model):
     id = models.AutoField(primary_key=True)
-    codigo = models.IntegerField(null=False, blank=False)
-    empresa = models.CharField(max_length=250, blank=False, null=False)
-    nombre_fantasia = models.CharField(max_length=250, blank=False, null=False)
-    cuit = models.CharField(max_length=100, blank=False, null=False)
-    activo =  models.IntegerField(null=False, blank=False)
-    f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    codigo = models.PositiveIntegerField(null=False, blank=False, unique=True)
+    nombre = models.CharField(max_length=255, blank=False, null=False)
+    nombre_fantasia = models.CharField(max_length=255, blank=False, null=False)
+    cuit = models.CharField(max_length=13, blank=False, null=False)
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
 
-    def __str__(self):
-        return self.codigo
+    def toJson(self):
+        return {'id': self.id, 'codigo': self.codigo, 'nombre': self.nombre, 'nombre_fantasia': self.nombre_fantasia, 
+        'cuit': self.cuit, 'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
 
     class Meta:
         verbose_name_plural = "Transportistas"
@@ -44,14 +47,15 @@ class Transportista(models.Model):
 
 class Camion(models.Model):
     id = models.AutoField(primary_key=True)
-    patente = models.CharField(max_length=100, blank=False, null=False)
-    id_transportista = models.ForeignKey(Transportista, on_delete=models.PROTECT, blank=False, null=False, db_column='id_transportista')
+    patente = models.CharField(max_length=7, blank=False, null=False)
+    transportista = models.ForeignKey(Transportista, on_delete=models.PROTECT, blank=False, null=False, db_column='codigo_transportista', to_field='codigo')
     tara = models.FloatField(null=False, blank=False)
-    f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
-    activo =  models.IntegerField(null=False, blank=False, default=1)
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
 
-    def __str__(self):
-        return self.patente
+    def toJson(self):
+        return {'id': self.id, 'patente': self.patente, 'codigo_transportista': self.transportista.codigo, 
+        'tara': self.tara, 'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
 
     class Meta:
         verbose_name_plural = "Camiones"
@@ -60,12 +64,13 @@ class Camion(models.Model):
 
 class Destino(models.Model):
     id = models.AutoField(primary_key=True)
-    destino = models.CharField(max_length=250, blank=False, null=False)
-    activo =  models.IntegerField(null=False, blank=False, default=1)
-    f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    nombre = models.CharField(max_length=255, blank=False, null=False)
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
     
-    def __str__(self):
-        return self.destino
+    def toJson(self):
+        return {'id': self.id, 'nombre': self.nombre, 
+        'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
 
     class Meta:
         verbose_name_plural = "Destinos"
@@ -74,12 +79,14 @@ class Destino(models.Model):
 
 class Residuo(models.Model):
     id = models.AutoField(primary_key=True)
-    residuo = models.CharField(max_length=250, blank=False, null=False, db_column='residuo')
-    activo =  models.IntegerField(null=False, blank=False, default=1)
-    f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    nombre = models.CharField(max_length=255, blank=False, null=False)
+    costo_tonelada = models.FloatField(blank=False, null=False)
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
 
-    def __str__(self):
-        return self.residuo
+    def toJson(self):
+        return {'id': self.id, 'nombre': self.nombre, 'costo_tonelada': self.costo_tonelada, 
+        'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
 
     class Meta:
         verbose_name_plural = "Residuos"
@@ -88,37 +95,40 @@ class Residuo(models.Model):
 
 class Pesaje(models.Model):
     id = models.AutoField(primary_key=True)
-    id_generador = models.IntegerField(null=False, blank=False)
-    nombre_generador = models.CharField(max_length=250, blank=False, null=False)
-    id_residuo = models.IntegerField(null=False, blank=False)
-    nombre_residuo = models.CharField(max_length=250, blank=False, null=False)
-    id_transportista = models.IntegerField(null=False, blank=False)
-    nombre_transportista = models.CharField(max_length=250, blank=False, null=False)
-    id_camion = models.IntegerField(null=False, blank=False)
-    patente_camion= models.CharField(max_length=250, blank=False, null=False)
-    id_destino = models.CharField(max_length=250, blank=False, null=False)
-    destino = models.CharField(max_length=250, blank=False, null=False)
-    """ id_usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT, blank=False, null=False ) """
-    id_usuario = models.IntegerField(Usuario,null=False, blank=False, default=1)  
+    generador = models.CharField(max_length=255, blank=False, null=False)
+    residuo = models.CharField(max_length=255, blank=False, null=False)
+    transportista = models.CharField(max_length=255, blank=False, null=False)
+    camion = models.CharField(max_length=255, blank=False, null=False)
+    destino = models.CharField(max_length=255, blank=False, null=False)
+    #TODO CAMBIAR IDUSUARIO POR FK USUARIOS
+    id_usuario = models.CharField(max_length=255, blank=False, null=False)
     pesaje = models.FloatField(null=False, blank=False)
     costo = models.FloatField(null=False, blank=False)
-    f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
-    activo =  models.IntegerField(null=False, blank=False, default=1)    
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
 
-    def __str__(self):
-        return self.pesaje
+    def toJson(self):
+        return {'id': self.id, 'generador': self.generador, 'residuo': self.residuo, 
+        'transportista': self.transportista, 'camion': self.camion, 'destino': self.destino, 
+        'id_usuario': 1, 'pesaje': self.pesaje, 'costo': self.costo, 'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M'),
+        'activo': self.activo }
 
     class Meta:
         verbose_name_plural = "Pesajes"
         verbose_name = "Pesaje"
         db_table = "pesajes"
 
+
 class GeneradoresResiduos(models.Model):
     id = models.AutoField(primary_key=True)
-    id_generador = models.ForeignKey(Generador, on_delete=models.PROTECT, blank=False, null=False, db_column='id_generador', name='id_generador')
-    id_residuo = models.ForeignKey(Residuo, on_delete=models.PROTECT, blank=False, null=False, db_column='id_residuo', name='id_residuo')
-    f_creacion = models.DateTimeField(auto_now=True, blank=False, null=False)
-    activo =  models.IntegerField(null=False, blank=False, default=1)
+    generador = models.ForeignKey(Generador, on_delete=models.PROTECT, blank=False, null=False, db_column='id_generador')
+    residuo = models.ForeignKey(Residuo, on_delete=models.PROTECT, blank=False, null=False, db_column='id_residuo')
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
+
+    def toJson(self):
+        return {'id': self.id, 'id_generador': self.generador.id, 'id_residuo': self.residuo.id,        
+        'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M'), 'activo': self.activo }
 
     class Meta:
         verbose_name_plural = "GeneradoresResiduos"

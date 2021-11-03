@@ -1,190 +1,238 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block imports %}{% endblock %}
-
+{% block css %}
+<style>
+    textarea:hover,
+    input:hover,
+    textarea:active,
+    input:active,
+    textarea:focus,
+    input:focus {
+        outline: 0px !important;
+        -webkit-appearance: none;
+        box-shadow: none !important;
+    }
+</style>
+{% endblock %}
 {% block content %}
 
-<div class="row body">
-    <h1 class="text-center mt-5 titulo">Pesaje</h1>
-    <div class="col-sm-3"></div>
-    <div class="col-sm-6">
-        <label>Generadores</label><br>
-        <select class="selectpicker form-control sm" id="generador" title="Seleccione generador"
-            data-live-search="true">
-            {% for item in generadores %}
-            <option value="{{item.id}}">{{item.id}} - {{item.nombre}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label>Residuos</label><br>
-        <select class="selectpicker form-control sm" id="residuos" title="Seleccione residuos" data-live-search="true">
-
-        </select>
-        <br>
-        <label>Transportistas</label><br>
-        <select class="selectpicker form-control sm" id="transportista" title="Seleccione transportista"
-            data-live-search="true">
-            {% for item in transportistas %}
-            <option value="{{item.codigo}}">{{item.codigo}} - {{item.empresa}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label>Camiones</label><br>
-        <select class="selectpicker form-control sm" id="camiones" title="Seleccione camiones" data-live-search="true">
-        </select>
-        <br>
-        <label>Destino</label><br>
-        <select class="selectpicker form-control sm" id="destino" title="Seleccione destino" data-live-search="true">
-            {% for item in destinos %}
-            <option value="{{item.id}}">{{item.destino}}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label>Peso</label><br>
-        <div class="form-control sm">
-            <div class="input-group">
-                <input id="peso" type="text" required class="form-control border-success" placeholder="Peso">
-                <span class="input-group-addon"></span>
-                <input id="tara" type="text" required class="form-control-sm border-primary"
-                    style="background-color: rgb(231, 220, 220)" disabled placeholder="Tara">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <h1 class="text-center mt-5 titulo">Pesaje</h1>
+            <div class="form-group mb-3">
+                <label class="form-label">Generadores</label>
+                <select class="form-control selectpicker" id="generador" title="Seleccione generador" data-live-search="true">
+                    {% for item in generadores %}
+                    <option value="{{item.id}}">CUIT: {{item.cuit}} | {{item.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Residuos</label>
+                <select class="form-control selectpicker" disabled id="residuo" title="Seleccione residuo" data-live-search="true"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Transportistas</label>
+                <select class="form-control selectpicker" id="transportista" title="Seleccione transportista"
+                    data-live-search="true">
+                    {% for item in transportistas %}
+                    <option value="{{item.codigo}}">{{item.codigo}} | CUIT: {{item.cuit}} | {{item.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Camiones</label>
+                <select class="form-control selectpicker" disabled id="camion" title="Seleccione camión" data-live-search="true"></select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Destinos</label>
+                <select class="form-control selectpicker" id="destino" title="Seleccione destino" data-live-search="true">
+                    {% for item in destinos %}
+                    <option value="{{item.id}}">{{item.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Peso</label>
+                <div class="input-group">
+                    <input id="peso" type="number" class="form-control" disabled placeholder="Peso">
+                    <div class="input-group-append">
+                        <input id="tara" type="number" class="form-control" readonly placeholder="Tara">
+                    </div>
+                </div>
+            </div>
+            <div class="form-control btn-group">
+                <button id="limpiar" class="btn btn-dark border-primary">Limpiar</button>
+                <button id="enviar" class="btn btn-success border-primary" disabled>Enviar</button>
             </div>
         </div>
-        <div class="form-control btn-group mt-3">
-            <button id="limpiar" class="btn btn-dark border-primary">Limpiar</button>
-            <button id="enviar" class="btn btn-success border-primary">Enviar</button>
-        </div>
-        <br>
+        <div class="col-lg-2"></div>
     </div>
-    <div class="col-sm-2"></div>
 </div>
+
 {% endblock %}
 
 {% block javascript %}
 <script>
-
-    function SelectorResiduo() {
-        $('#generador').change(function () {
-            $('#generador option:selected').each(function () {
-                elegido = $('#generador').val();
-                $.ajax({
-                    url: "/ajax/GetResiduosbyIdGenerador",
-                    type: "post",
-                    data: {
-                        idGenerador: elegido,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    }
-                }).done(function (data) {
-                    $('#residuos').html('');
-                    if (data.length == 0) {
-                        $('#residuos').append(`<option disabled value="0">No se encontraron resultados</option>`);
-                        $('.selectpicker').selectpicker("refresh");
-                    }
-                    data.forEach(element => {
-                        $('#residuos').append(`<option value="${element.id}">${element.residuo}</option>`);
-                    });
-                    $('.selectpicker').selectpicker("refresh");
+    $('#generador').change(function () {
+        const idGenerador = $(this).val();
+        $.ajax({
+            url: "/ajax/GetResiduosbyIdGenerador",
+            type: "get",
+            data: {
+                idGenerador,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }
+        }).done(function(data){
+            
+            const residuo = $("#residuo");
+            residuo.html('');
+            residuo.attr("disabled", false);
+            residuo.attr("placeholder", "Seleccione residuo");
+            if(data.length != 0){
+                data.forEach(element => {
+                    residuo.append(`<option value="${element.id}">${element.nombre}</option>`);
                 });
-            });
+            }else{
+                residuo.append('<option disabled value="0">No se encontraron resultados</option>');
+                residuo.attr("placeholder", "No se encontraron resultados");
+                residuo.attr("disabled", true);
+            }
+            $('.selectpicker').selectpicker("refresh");
+            checkFields();
+        });
+    });
 
-        })
-    };
+    $("#residuo").change(function(){
+        checkFields();
+    });
 
-    function SelectorVehiculo() {
-        $('#transportista').change(function () {
-            $('#transportista option:selected').each(function () {
-                elegido = $('#transportista').val();
-                $.ajax({
-                    url: "/ajax/GetVehiculobyIdTransportista",
-                    type: "post",
-                    data: {
-                        idTransportista: elegido,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    }
-                }).done(function (data) {
-                    $('#camiones').html('');
-                    if (data.length == 0) {
-                        $('#camiones').append(`<option disabled value="0">No se encontraron resultados</option>`);
-                        $('.selectpicker').selectpicker("refresh");
-                    }
-                    data.forEach(element => {
-                        $('#camiones').append(`<option value="${element.id}">${element.patente}</option>`);
-                    });
-                    $('.selectpicker').selectpicker("refresh");
+    $('#transportista').change(function () {
+        const idTransportista = $(this).val();
+        $.ajax({
+            url: "/ajax/GetCamionbyIdTransportista",
+            type: "get",
+            data: {
+                idTransportista,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }
+        }).done(function(data){            
+            const camion = $("#camion");
+            camion.html('');
+            camion.attr("disabled", false);
+            camion.attr("placeholder", "Seleccione camion");
+            if(data.length != 0){
+                data.forEach(element => {
+                    camion.append(`<option value="${element.id}">${element.patente}</option>`);
                 });
-            });
+            }else{
+                camion.append('<option disabled value="0">No se encontraron resultados</option>');
+                camion.attr("placeholder", "No se encontraron resultados");
+                camion.attr("disabled", true);
+                $("#tara").val("");
+                $("#peso").val("");
+                $("#peso").attr("disabled", true);
+            }
+            $('.selectpicker').selectpicker("refresh");
+            checkFields();
+        });
+    });
 
-        })
-    };
+    $('#camion').change(function () {
+        const idCamion = $(this).val();
+        $.ajax({
+            url: "/ajax/getTara",
+            type: "get",
+            data: {
+                idCamion,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }
+        }).done(function(data){  
+            if(data){
+                $("#tara").val(data.tara);
+                $("#peso").attr("disabled", false);
+            }
+            checkFields();
+        });
+    });
 
-    function FijarTara() {
-        $('#camiones').change(function () {
-            $('#camiones option:selected').each(function () {
-                elegido = $('#camiones').val();
-                $.ajax({
-                    url: "/ajax/FijarTara",
-                    type: "post",
-                    data: {
-                        idPatente: elegido,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    }
-                }).done(function (data) {
-                    $('#tara').val(data);
-                });
-            });
+    $("#peso").keyup(function(){            
+        if(parseInt($(this).val()) <= parseInt($("#tara").val())){
+            $(this).removeClass("border-success");
+            $(this).addClass("border-danger");
+        }else{
+            $(this).removeClass("border-danger");
+            $(this).addClass("border-success");
+        }
+        checkFields();
+    });
 
-        })
-    };
+    $("#destino").change(function(){
+        checkFields();
+    });
 
-
-    function limpiar() {
+    $("#peso").keydown(function (e) {
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+            ((e.keyCode == 65 || e.keyCode == 86 || e.keyCode == 67) && (e.ctrlKey === true || e.metaKey === true)) ||
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+            return;
+        }
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+        if (this.value.length > 14 && e.keyCode != 8) {
+            return false;
+        }
+    });
+    
+    $("#limpiar").click(function(){
         $("#generador").val('');
-        $("#residuos").val('');
-        $('#transportista').val('');
-        $("#camiones").val('');
+        $("#residuo").html('');
+        $("#residuo").attr("disabled", true);        
+        $("#transportista").val('');
+        $("#camion").html('');
+        $("#camion").attr("disabled", true);             
         $("#destino").val('');
-        $('#peso').val('');
+        $("#peso").val('');
+        $("#peso").removeClass("border-success");
+        $("#peso").removeClass("border-danger");             
         $('#tara').val('');
-        $('#camiones').html("");
-        $('#residuos').html("");
         $('.selectpicker').selectpicker("refresh");
+    });
 
+    function checkFields(){
+        if($("#generador").val() != 0 &&
+        $("#residuo").val() != 0 &&
+        $("#transportista").val() != 0 &&
+        $("#camion").val() != 0 && 
+        $("#destino").val() != 0 &&
+        (parseInt($("#peso").val()) > parseInt($("#tara").val()))){
+            $("#enviar").attr("disabled", false);
+        }else{
+            $("#enviar").attr("disabled", true);
+        }     
     }
-    function validation() {
-        if ($("#generador").val() == '' || $("#residuos").val() == '' || $("#transportista").val() == '' || $("#camiones").val() == '' || $("#destino").val() == '' || $("#peso").val() == '' || $("#tara").val() > $('#peso').val()) {
-            return window.alert("Debe completar todos los campos.");
 
-        } else {
-            return true;
-        }
-    }
-    $('#limpiar').on('click', function () {
-        limpiar();
-    })
+    $("#enviar").click(function(){
+        $.ajax({
+            url: "/ajax/GuardarPesaje",
+            type: "post",
+            data: {
+                generador: $("#generador").val(),
+                residuo: $("#residuo").val(),
+                transportista: $("#transportista").val(),
+                camion: $("#camion").val(),
+                destino: $("#destino").val(),
+                peso: $("#peso").val(),                
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }
+        }).done(function(data){  
 
-    $('#enviar').on('click', function () {
-        if (validation() == true) {
-            $.ajax({
-                url: "/ajax/GuardarPesaje",
-                type: "post",
-                data: {
-                    generador: $("#generador").val(),
-                    residuos: $("#residuos").val(),
-                    transportista: $('#transportista').val(),
-                    camiones: $("#camiones").val(),
-                    destino: $("#destino").val(),
-                    peso: $('#peso').val(),
-                    tara: $('#tara').val(),
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                }
-            }).done(function (data) {
-                window.alert("Correcto");
-            });
-        }
-    })
+        });
+    });
 
-    SelectorResiduo();
-    SelectorVehiculo();
-    FijarTara();
 </script>
 {% endblock %}
