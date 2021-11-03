@@ -112,6 +112,7 @@
 
     $('#transportista').change(function () {
         const idTransportista = $(this).val();
+        console.log(idTransportista);
         $.ajax({
             url: "/ajax/GetCamionbyIdTransportista",
             type: "get",
