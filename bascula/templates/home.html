@@ -115,7 +115,6 @@
 
     $('#transportista').change(function () {
         const idTransportista = $(this).val();
-        console.log(idTransportista);
         $.ajax({
             url: "/ajax/GetCamionbyIdTransportista",
             type: "get",
@@ -124,7 +123,6 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             }
         }).done(function (data) {
-            console.log(data);
             const camion = $("#camion");
             camion.html('');
             camion.attr("disabled", false);
