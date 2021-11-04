@@ -1,13 +1,15 @@
-from django.urls import path 
+from django.urls import path
 from bascula.views import *
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('login/', login, name='login'),
-    path('historial/', historial, name='historial'),
-    path('ajax/GetResiduosbyIdGenerador', GetResiduosbyIdGenerador, name="ResiduosPorGenerador"),
-    path('ajax/GetCamionbyIdTransportista', GetCamionbyIdTransportista, name="GetCamionbyIdTransportista"),
-    path('ajax/getTara', getTara, name="FijarTara"),
-    path('ajax/GuardarPesaje', GuardarPesaje, name="GuardarPesaje"),
-    path('testing/', testing, name="GuardarPesaje")
+    path('', LoginView.as_view(template_name='login.html', redirect_authenticated_user=True), name="login"),
+    path('logout/', logout_request, name='logout'),
+    path('inicio/', login_required(home), name='home'),
+    path('historial/', login_required(historial), name='historial'),
+    path('ajax/GetResiduosbyIdGenerador', login_required(GetResiduosbyIdGenerador), name="ResiduosPorGenerador"),
+    path('ajax/GetCamionbyIdTransportista', login_required(GetCamionbyIdTransportista), name="GetCamionbyIdTransportista"),
+    path('ajax/getTara', login_required(getTara), name="FijarTara"),
+    path('ajax/GuardarPesaje', login_required(GuardarPesaje), name="GuardarPesaje"),
     ]

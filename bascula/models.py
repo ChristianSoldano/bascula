@@ -1,14 +1,62 @@
-from django import db
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-class Usuario(User):    
-    created_at = models.DateField(auto_now=True, blank=False, null=False)
-    updated_at = models.DateField(auto_now=True, blank=False, null=False)
+class UsuarioManager(BaseUserManager):
+    def create_user(self, username, nombre, apellido, password = None):
+        
+        usuario = self.model(
+            username = username,
+            nombre = nombre,
+            apellido = apellido
+        )
+
+        usuario.set_password(password)
+        usuario.save()
+        return usuario
+
+    def create_superuser(self, username, nombre, apellido, password):
+        usuario = self.create_user(
+            username = username,
+            nombre = nombre,
+            apellido = apellido,
+            password = password
+        )
+        
+        usuario.admin = True
+        usuario.save()
+        return usuario
+
+class Usuario(AbstractBaseUser):    
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=255, unique=True, blank=False, null=False)
+    nombre = models.CharField(max_length= 255, blank=False, null=False)
+    apellido = models.CharField(max_length= 255, blank=False, null=False)
+    admin = models.BooleanField(blank=False, null=False, default=False)
+    fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
+    activo = models.BooleanField(blank=False, null=False, default=True)
+    objects = UsuarioManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['nombre', 'apellido']
+
+    def toJson(self):
+        return {'id': self.id, 'username': self.username, 'nombre': self.nombre, 'apellido': self.apellido, 
+        'admin': self.admin, 'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
+
+    def has_perm(self, perm, obj = None):
+        return True
+    
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.admin
 
     class Meta:
         verbose_name_plural = "Usuarios"
         verbose_name = "Usuario"
+        db_table = "usuarios"
 
 class Generador(models.Model):    
     id = models.AutoField(primary_key=True)

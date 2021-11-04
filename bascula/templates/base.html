@@ -25,10 +25,11 @@
     <!-- NAV -->
     <nav>
         <div class="w3-bar w3-black nav">
+        {{user.nombre}}
             <a href="../" class="w3-bar-item w3-button left"><i class="fa fa-home fa-2x" aria-hidden="true"></i></a>
             <a href="/admin" class="w3-bar-item w3-button"><i class="fa fa-cog fa-2x" aria-hidden="true"></i></a>
             <a href="/historial" class="w3-bar-item w3-button"><i class="fa fa-truck fa-2x" aria-hidden="true"></i></a>
-            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
+            <a href="{% url 'logout' %}" class="w3-bar-item w3-button"><i class="fa fa-sign-out fa-2x" aria-hidden="true"></i></a>
         </div>
     </nav>
     {% block content %}{% endblock %}
@@ -36,7 +37,6 @@
     <!-- FOOTER -->
     <footer class="footer">
         <p> Chrisma desarrolladores <br>
-            Tel: +54 9 223 636-3325<br>
             chrisma.software@gmail.com <br>
             <img src="{% static 'img/logo.png' %}" class="logo" alt=""> <br>
         </p>
