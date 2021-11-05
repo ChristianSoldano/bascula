@@ -11,7 +11,7 @@ class UsuarioManager(BaseUserManager):
         )
 
         usuario.set_password(password)
-        usuario.save()
+        usuario.save(using=self._db)
         return usuario
 
     def create_superuser(self, username, nombre, apellido, password):
@@ -22,7 +22,7 @@ class UsuarioManager(BaseUserManager):
             password = password
         )
         
-        usuario.admin = True
+        usuario.is_admin = True
         usuario.save()
         return usuario
 
@@ -38,6 +38,9 @@ class Usuario(AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['nombre', 'apellido']
+
+    def __str__(self):
+        return self.username
 
     def toJson(self):
         return {'id': self.id, 'username': self.username, 'nombre': self.nombre, 'apellido': self.apellido, 
@@ -66,6 +69,9 @@ class Generador(models.Model):
     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo = models.BooleanField(blank=False, null=False, default=True)
 
+    def __str__(self):
+        return self.nombre
+
     def toJson(self):
         return {'id': self.id, 'nombre': self.nombre, 'cuit': self.cuit, 'nombre_fantasia': self.nombre_fantasia, 
         'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
@@ -84,6 +90,9 @@ class Transportista(models.Model):
     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo = models.BooleanField(blank=False, null=False, default=True)
 
+    def __str__(self):
+        return self.nombre
+
     def toJson(self):
         return {'id': self.id, 'codigo': self.codigo, 'nombre': self.nombre, 'nombre_fantasia': self.nombre_fantasia, 
         'cuit': self.cuit, 'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
@@ -101,6 +110,9 @@ class Camion(models.Model):
     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo = models.BooleanField(blank=False, null=False, default=True)
 
+    def __str__(self):
+        return self.patente
+
     def toJson(self):
         return {'id': self.id, 'patente': self.patente, 'codigo_transportista': self.transportista.codigo, 
         'tara': self.tara, 'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
@@ -116,6 +128,9 @@ class Destino(models.Model):
     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo = models.BooleanField(blank=False, null=False, default=True)
     
+    def __str__(self):
+        return self.nombre
+        
     def toJson(self):
         return {'id': self.id, 'nombre': self.nombre, 
         'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M') , 'activo': self.activo }
@@ -131,6 +146,9 @@ class Residuo(models.Model):
     costo_tonelada = models.FloatField(blank=False, null=False)
     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo = models.BooleanField(blank=False, null=False, default=True)
+
+    def __str__(self):
+        return self.nombre
 
     def toJson(self):
         return {'id': self.id, 'nombre': self.nombre, 'costo_tonelada': self.costo_tonelada, 
