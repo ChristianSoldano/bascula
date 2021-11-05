@@ -284,7 +284,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
     width:  full;
   }
   
-  input[type="text"],input[type="contraseña"]{
+  input[type="text"],input[type="password"]{
     width:98%;
     padding:15px 0px 15px 8px;
     border-radius:5px;
