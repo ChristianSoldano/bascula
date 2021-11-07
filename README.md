@@ -5,4 +5,6 @@ Dependencias:
 - Mysqlclient 2.0.3 `pip install mysqlclient==2.0.3`
 - Python-decouple 3.5 `pip install python-decouple==3.5`
 
-Para correr la aplicación es necesario crear el archivo .env en la raiz del proyecto (Basarse en .env-example) y correr el archivo .SQL para la creación de la base de datos
+Para que la aplicación funcione es necesario ejecutar las migraciones. Ejecute `python manage.py migrate`
+
+Para iniciar el servidor ejecute `python manage.py runserver`
