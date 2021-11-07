@@ -8,10 +8,23 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container mb-5">
     <div class="row">
-        <h1 class="text-center mt-5 titulo">Pesajes</h1>           
-        <table id="mytable" class="display table responsive table-striped table-hover" cellspacing="0" width="100%">
+        <h1 class="text-center mt-5 mb-5 titulo">Pesajes</h1>
+        <div class="col-auto mb-5">
+            <form>
+                <label class="form-text">Periodo <i class="far fa-calendar"></i></label>
+                <div Class="input-group">
+                    <input type="text" name="periodo" id="periodo" autocomplete="off" Class="form-control"/>
+                    <span Class="input-group-append">
+                        <button data-bs-toggle="tooltip" data-bs-placement="top" title="Filtrar"Class="btn btn-md btn-primary" type="submit" id="btnFiltrar" data-toggle="tooltip" data-placement="top" title="Filtrar">
+                            <span Class="fa fa-search" aria-hidden="true"></span>
+                        </button>
+                    </span>
+                </div>
+            </form>       
+        </div>   
+        <table id="mytable" class="display table responsive table-striped table-hover text-center" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -34,8 +47,8 @@
                     <td>{{ item.transportista}}</td>
                     <td>{{ item.camion }}</td>
                     <td>{{ item.destino }}</td>
-                    <td>{{ item.pesaje}}</td>
-                    <td>{{ item.costo }}</td>
+                    <td>{{ item.pesaje}} kg</td>
+                    <td>${{ item.costo }}</td>
                     <td>{{ item.usuario }}</td>
                 </tr>
                 {% endfor %}
@@ -60,7 +73,15 @@
 
 <script>
     moment.locale('es');
-    $('#periodo').daterangepicker();
+    $('#periodo').daterangepicker({
+        autoApply: true,
+        {% if desde and hasta %}
+        startDate: "{{desde}}",
+        endDate: "{{hasta}}",
+        {% endif %}
+        alwaysShowCalendar: true,        
+        maxDate: moment()
+    });
 
     $(document).ready(function () {
         var datatable = $("#mytable").DataTable({
@@ -79,8 +100,9 @@
                 "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
                 "sInfoFiltered": "(filtrado de un total de _TOTAL_ registros )",
                 "sInfoPostFix": "",
-                "sSearch": "Buscar:",
+                "sSearch": "",
                 "sUrl": "",
+                searchPlaceholder: "Buscar",
                 "sInfoThousands": ",",
                 "sLoadingRecords": "Cargando...",
                 "oPaginate": {
