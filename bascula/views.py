@@ -1,6 +1,6 @@
 import json
 import datetime
-from django import forms 
+from django import forms
 from django.shortcuts import render, redirect
 from django.http import *
 from bascula.models import *
@@ -14,50 +14,34 @@ def login(request):
 
 def home(request):
     generadores = Generador.objects.all().filter(activo=1)
-    residuos = Residuo.objects.all().order_by('nombre').filter(activo=1)
     transportistas = Transportista.objects.all().order_by('codigo').filter(activo=1)
-    camiones = Camion.objects.all().order_by('patente').filter(activo=1)
     destinos = Destino.objects.all().order_by('nombre').filter(activo=1)
     return render(request, "home.html",
                   {'generadores': generadores,
-                   'residuos': residuos,
                    'transportistas': transportistas,
-                   'camiones': camiones,
                    'destinos': destinos
                    })
 
 
-def historial(request):
-    generadores = Generador.objects.all().filter(activo=1)
-    residuos = Residuo.objects.all().order_by('nombre').filter(activo=1)
-    transportistas = Transportista.objects.all().order_by('codigo').filter(activo=1)
-    camiones = Camion.objects.all().order_by('patente').filter(activo=1)
-    destinos = Destino.objects.all().order_by('nombre').filter(activo=1)
-    pesajes = Pesaje.objects.all().filter(activo=1).order_by('-id')
-    date = datetime.datetime.now
+def pesajes(request):
+    pesajes = Pesaje.objects.all().filter(activo=1).order_by('-fcreacion')
 
-    return render(request, "historial.html",
-                  {'generadores': generadores,
-                   'residuos': residuos,
-                   'transportistas': transportistas,
-                   'camiones': camiones,
-                   'destinos': destinos,
-                   'pesaje': pesajes,
-                   'fecha': date
-                   })
+    return render(request, "historial.html", {'pesaje': pesajes})
 
 
 def GetResiduosbyIdGenerador(request):
     if request.method == 'GET':
         if "idGenerador" in request.GET:
-            ids = GeneradoresResiduos.objects.filter(
-                generador=request.GET["idGenerador"])
-            residuos = []
-            for item in ids:
-                r = Residuo.objects.get(id=item.residuo.id)
-                residuos.append(r.toJson())
-            residuos.sort(key=lambda x: x["nombre"])
-            return HttpResponse(json.dumps(residuos), content_type='application/json')
+            generador = Generador.objects.filter(id=request.GET["idGenerador"])
+            if generador.exists():
+                residuos = []
+                for r in generador.first().residuos.filter(activo=1):
+                    residuos.append(r.toJson())
+
+                residuos.sort(key=lambda x: x["nombre"])
+                return HttpResponse(json.dumps(residuos), content_type='application/json')
+            else:
+                return HttpResponseNotFound()
     else:
         return HttpResponseNotFound()
 
@@ -65,8 +49,8 @@ def GetResiduosbyIdGenerador(request):
 def GetCamionbyIdTransportista(request):
     if request.method == 'GET':
         if "idTransportista" in request.GET:
-            ids = Camion.objects.filter(
-                transportista=request.GET["idTransportista"]).order_by('patente')
+            ids = Camion.objects.filter(activo=1,
+                                        transportista=request.GET["idTransportista"]).order_by('patente')
             camiones = []
             for item in ids:
                 camiones.append(item.toJson())
@@ -104,15 +88,20 @@ def GuardarPesaje(request):
                 transportista=transportista.first().nombre,
                 camion=camion.first().patente,
                 destino=destino.first().nombre,
-                pesaje=peso,
+                pesaje=float(peso) - camion.first().tara,
                 costo=((float(peso) - camion.first().tara)
                        * residuo.first().costo_tonelada),
-                id_usuario=1  # TODO CAMBIAR POR IDUSUARIO FK
+                usuario=Usuario.objects.get(id=request.user.id)
             ).save()
             return HttpResponse(status=200)
         else:
             return HttpResponseBadRequest()
 
+
 def logout_request(request):
     logout(request)
     return redirect("login")
+
+
+def testing(request):
+    return HttpResponse(datetime.datetime.now())

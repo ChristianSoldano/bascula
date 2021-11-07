@@ -2,70 +2,66 @@
 {% load static %}
 
 {% block imports %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 {% endblock %}
 
 {% block content %}
-
-
-
 <div class="container">
     <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-12">
-            <h1 class="text-center mt-5 titulo">Historial</h1>
-            <table id="mytable" class="display table responsive table-striped table-hover" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Generador</th>
-                        <th>Residuo</th>
-                        <th>Transportista</th>
-                        <th>Camion</th>
-                        <th>Destino</th>
-                        <th>Pesaje</th>
-                        <th>Costo</th>
-                        <th>Usuario</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in pesaje %}
-                    <tr>
-                        <td>{{ item.id}}</td>
-                        <td>{{ item.fcreacion }}</td>
-                        <td>{{ item.generador }} </td>
-                        <td>{{ item.residuo}}</td>
-                        <td>{{ item.transportista}}</td>
-                        <td>{{ item.camion }}</td>
-                        <td>{{ item.destino }}</td>
-                        <td>{{ item.pesaje}}</td>
-                        <td>{{ item.costo }}</td>
-                        <td>{{ item.id_usuario }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Generador</th>
-                        <th>Residuo</th>
-                        <th>Transportista</th>
-                        <th>Camion</th>
-                        <th>Destino</th>
-                        <th>Pesaje</th>
-                        <th>Costo</th>
-                        <th>Usuario</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+        <h1 class="text-center mt-5 titulo">Pesajes</h1>           
+        <table id="mytable" class="display table responsive table-striped table-hover" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Generador</th>
+                    <th>Residuo</th>
+                    <th>Transportista</th>
+                    <th>Camion</th>
+                    <th>Destino</th>
+                    <th>Pesaje</th>
+                    <th>Costo</th>
+                    <th>Usuario Creador</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pesaje %}
+                <tr>
+                    <td>{{ item.fcreacion |date:"d/m/Y H:i"}}</td>
+                    <td>{{ item.generador }} </td>
+                    <td>{{ item.residuo}}</td>
+                    <td>{{ item.transportista}}</td>
+                    <td>{{ item.camion }}</td>
+                    <td>{{ item.destino }}</td>
+                    <td>{{ item.pesaje}}</td>
+                    <td>{{ item.costo }}</td>
+                    <td>{{ item.usuario }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
+
+
 {% endblock %}
 
 {% block javascript %}
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.3/js/buttons.bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
 <script>
+    moment.locale('es');
+    $('#periodo').daterangepicker();
+
     $(document).ready(function () {
         var datatable = $("#mytable").DataTable({
             "order": [1, "desc"],
@@ -94,22 +90,22 @@
                     "sPrevious": "Anterior"
                 }
             },
-            "lengthMenu": [[10, 50, 100, 250, 500], [10, 50, 100, 250, 500]],
+            "lengthMenu": [[20, 50, 100, 250, 500], [20, 50, 100, 250, 500]],
             buttons: [
                 {
                     extend: 'excel',
                     text: 'EXCEL',
-                    title: '{{fecha}}'
+                    title: moment(new Date()).format('D [de] MMMM [a las] H[.]mm [hs]')
                 },
                 {
                     extend: 'pdf',
                     text: 'PDF',
-                    title: '{{fecha}}'
+                    title: moment(new Date()).format('D [de] MMMM [a las] H[.]mm [hs]')
                 },
                 {
                     extend: 'csv',
                     text: 'CSV',
-                    title: '{{fecha}}'
+                    title: moment(new Date()).format('D [de] MMMM [a las] H[.]mm [hs]')
                 },
             ],
         });
