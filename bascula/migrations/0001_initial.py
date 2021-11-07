@@ -434,6 +434,22 @@ def inserts(apps, schema_editor):
         ('WUD002',50029,8040, '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1),
         ('WYS583',50012,10540, '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1),
         ('XKB052',50042,8120, '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1)""")
+        cursor.execute("""INSERT INTO `admin_interface_theme` (`id`,`name`,`active`,`title`,`title_visible`,`logo`,`logo_visible`,
+        `css_header_background_color`,`title_color`,`css_header_text_color`,`css_header_link_color`,
+        `css_header_link_hover_color`,`css_module_background_color`,`css_module_text_color`,`css_module_link_color`,
+        `css_module_link_hover_color`,`css_module_rounded_corners`,`css_generic_link_color`,
+        `css_generic_link_hover_color`,`css_save_button_background_color`,`css_save_button_background_hover_color`,
+        `css_save_button_text_color`,`css_delete_button_background_color`,`css_delete_button_background_hover_color`,
+        `css_delete_button_text_color`,`css`,`list_filter_dropdown`,`related_modal_active`,
+        `related_modal_background_color`,`related_modal_rounded_corners`,`logo_color`,`recent_actions_visible`,
+        `favicon`,`related_modal_background_opacity`,`env_name`,`env_visible_in_header`,`env_color`,
+        `env_visible_in_favicon`,`related_modal_close_button_visible`,`language_chooser_active`,
+        `language_chooser_display`,`list_filter_sticky`,`form_pagination_sticky`,`form_submit_sticky`,
+        `css_module_background_selected_color`,`css_module_link_selected_color`,`logo_max_height`,`logo_max_width`)
+        VALUES (1,'Pesajes Administración',1,'Administración Pesajes',1,'',0,'#0C4B33','#F5DD5D','#44B78B','#FFFFFF',
+        '#C9F0DD','#44B78B','#FFFFFF','#FFFFFF','#C9F0DD',1,'#0C3C26','#156641','#0C4B33','#0C3C26','#FFFFFF',
+        '#BA2121','#A41515','#FFFFFF','',1,1,'#000000',1,'#FFFFFF',1,'admin-interface/favicon/favicon.png','0.3',
+        '',1,'#E74C3C',1,1,1,'code',1,0,0,'#FFFFCC','#FFFFFF',100,400);""")
 
 class Migration(migrations.Migration):
 

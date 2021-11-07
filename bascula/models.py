@@ -139,6 +139,9 @@ class Pesaje(models.Model):
     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
     activo = models.BooleanField(blank=False, null=False, default=True)
 
+    def __str__(self):
+        return self.generador + " - " + str(int(self.pesaje)) + " kg de " + self.residuo
+        
     def toJson(self):
         return {'id': self.id, 'generador': self.generador, 'residuo': self.residuo,
                 'transportista': self.transportista, 'camion': self.camion, 'destino': self.destino,
@@ -149,22 +152,3 @@ class Pesaje(models.Model):
         verbose_name_plural = "Pesajes"
         verbose_name = "Pesaje"
         db_table = "pesajes"
-
-
-# class GeneradoresResiduos(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     generador = models.ForeignKey(
-#         Generador, on_delete=models.PROTECT, blank=False, null=False, db_column='id_generador')
-#     residuo = models.ForeignKey(
-#         Residuo, on_delete=models.PROTECT, blank=False, null=False, db_column='id_residuo')
-#     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
-#     activo = models.BooleanField(blank=False, null=False, default=True)
-
-#     def toJson(self):
-#         return {'id': self.id, 'id_generador': self.generador.id, 'id_residuo': self.residuo.id,
-#                 'fcreacion': self.fcreacion.strftime('%Y-%m-%d %H:%M'), 'activo': self.activo}
-
-#     class Meta:
-#         verbose_name_plural = "GeneradoresResiduos"
-#         verbose_name = "GeneradoresResiduos"
-#         db_table = "generadores_residuos"

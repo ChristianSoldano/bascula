@@ -87,7 +87,6 @@ class PesajeAdmin(admin.ModelAdmin):
 class CamionAdmin(admin.ModelAdmin):
     list_display = [ 'patente', 'transportista', 'tara']
     list_display_links = [ 'patente', 'transportista']
-    search_fields = ['patente', 'transportista']
+    search_fields = ['patente', 'transportista__nombre']
     ordering = ['patente']
     list_per_page = 20
-
