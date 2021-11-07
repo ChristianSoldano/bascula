@@ -39,8 +39,7 @@ class Generador(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(
         max_length=255, blank=False, null=False, unique=True)
-    nombre_fantasia = models.CharField(
-        max_length=255, blank=False, null=False, unique=True)
+    nombre_fantasia = models.CharField(max_length=255, null=False, default="")
     cuit = models.CharField(max_length=13, blank=False, null=False, unique=True, validators=[RegexValidator(
         regex='^(20|23|24|25|26|27|30|33|34)(-)(\D)?[0-9]{8}(-)(\D)?[0-9]$', message="Formato de cuit inválido")])
     residuos = models.ManyToManyField(Residuo)
@@ -65,8 +64,7 @@ class Transportista(models.Model):
     codigo = models.PositiveIntegerField(null=False, blank=False, unique=True)
     nombre = models.CharField(
         max_length=255, blank=False, null=False, unique=True)
-    nombre_fantasia = models.CharField(
-        max_length=255, blank=False, null=False, unique=True)
+    nombre_fantasia = models.CharField(max_length=255, null=False, default="")
     cuit = models.CharField(max_length=13, blank=False, null=False, unique=True, validators=[RegexValidator(
         regex='^(20|23|24|25|26|27|30|33|34)(-)(\D)?[0-9]{8}(-)(\D)?[0-9]$', message="Formato de cuit inválido")])
     fcreacion = models.DateTimeField(auto_now=True, blank=False, null=False)
