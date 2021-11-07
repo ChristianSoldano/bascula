@@ -6,7 +6,7 @@ from bascula.models import *
 class GeneradorAdmin(admin.ModelAdmin):
     list_display = [ 'nombre', 'nombreFantasia', 'cuit']
     list_display_links = ['nombre']
-    search_fields = ['nombre', 'nombreFantasia', 'cuit ']
+    search_fields = ['nombre', 'nombre_fantasia', 'cuit']
     ordering = ['nombre']
     filter_horizontal = ('residuos',)
     list_per_page = 20
@@ -24,7 +24,7 @@ class TransportistaAdmin(admin.ModelAdmin):
     inlines = [CamionInline,]
     list_display = [ 'codigo' ,'nombre', 'nombreFantasia', 'cuit']
     list_display_links = [ 'codigo' ,'nombre']
-    search_fields = ['nombre', 'nombreFantasia', 'cuit', 'codigo']
+    search_fields = ['nombre', 'nombre_fantasia', 'cuit', 'codigo']
     ordering = ['nombre']
     list_per_page = 20
 

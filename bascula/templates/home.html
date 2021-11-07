@@ -80,7 +80,7 @@
 {% endblock %}
 
 {% block javascript %}
-<script>
+<script>  
     $('#generador').change(function () {
         const idGenerador = $(this).val();
         $.ajax({
@@ -191,7 +191,7 @@
         }
     });
 
-    $("#limpiar").click(function () {
+    function limpiar(){
         $("#generador").val('');
         $("#residuo").html('');
         $("#residuo").attr("disabled", true);
@@ -204,6 +204,11 @@
         $("#peso").removeClass("border-danger");
         $('#tara').val('');
         $('.selectpicker').selectpicker("refresh");
+        $("#enviar").attr("disabled", true);
+    }
+
+    $("#limpiar").click(function () {
+        limpiar();
     });
 
     function checkFields() {
@@ -220,21 +225,47 @@
     }
 
     $("#enviar").click(function () {
-        $.ajax({
-            url: "/ajax/GuardarPesaje",
-            type: "post",
-            data: {
-                generador: $("#generador").val(),
-                residuo: $("#residuo").val(),
-                transportista: $("#transportista").val(),
-                camion: $("#camion").val(),
-                destino: $("#destino").val(),
-                peso: $("#peso").val(),
-                csrfmiddlewaretoken: '{{ csrf_token }}'
+        Swal.fire({
+            title: '¿Cargar Pesaje?',
+            showCancelButton: true,
+            icon: 'warning',
+            confirmButtonText: 'Cargar',
+            cancelButtonText: 'Cancelar',
+            customClass: {
+                actions: 'my-actions',
+                cancelButton: 'order-1',
+                confirmButton: 'order-2',
             }
-        }).done(function (data) {
-
-        });
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/ajax/GuardarPesaje",
+                    type: "post",
+                    data: {
+                        generador: $("#generador").val(),
+                        residuo: $("#residuo").val(),
+                        transportista: $("#transportista").val(),
+                        camion: $("#camion").val(),
+                        destino: $("#destino").val(),
+                        peso: $("#peso").val(),
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
+                }).done(function (data) {
+                    limpiar();
+                    Swal.fire({
+                        title: '¡Pesaje guardado!',
+                        showCancelButton: true,
+                        icon: 'success',
+                        confirmButtonText: 'Ver Listado',
+                        cancelButtonText: 'Cerrar',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href='/pesajes';
+                        }
+                    });
+                });
+            }
+        });        
     });
 
 </script>
