@@ -80,7 +80,7 @@
 {% endblock %}
 
 {% block javascript %}
-<script>  
+<script>
     $('#generador').change(function () {
         const idGenerador = $(this).val();
         $.ajax({
@@ -191,7 +191,7 @@
         }
     });
 
-    function limpiar(){
+    function limpiar() {
         $("#generador").val('');
         $("#residuo").html('');
         $("#residuo").attr("disabled", true);
@@ -236,7 +236,7 @@
                 cancelButton: 'order-1',
                 confirmButton: 'order-2',
             }
-            }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     url: "/ajax/GuardarPesaje",
@@ -251,21 +251,32 @@
                         csrfmiddlewaretoken: '{{ csrf_token }}'
                     }
                 }).done(function (data) {
-                    limpiar();
+                    //limpiar();
                     Swal.fire({
                         title: '¡Pesaje guardado!',
                         showCancelButton: true,
                         icon: 'success',
-                        confirmButtonText: 'Ver Listado',
+                        confirmButtonText: 'Ver Carga',
                         cancelButtonText: 'Cerrar',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            location.href='/pesajes';
+                            swal.fire({
+                                title: "Registro",
+                                html: '<p class="texto-recibo"> Número de registro: ' + data.id + '<br>' +
+                                    'Fecha: ' + data.fcreacion + '<br>' +
+                                    'Generador: ' + data.generador + '<br>' +
+                                    'Residuo: ' + data.residuo + '<br>' +
+                                    'Transportista: ' + data.transportista + '<br>' +
+                                    'Camion: ' + data.camion + '<br>' +
+                                    'Destino: ' + data.destino + '<br>' +
+                                    'Pesaje: ' + data.pesaje + '  kg <br>' +
+                                    'Costo: $' + data.costo + '<br> </p>'
+                            })
                         }
                     });
                 });
             }
-        });        
+        });
     });
 
 </script>

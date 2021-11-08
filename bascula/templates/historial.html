@@ -27,6 +27,7 @@
         <table id="mytable" class="display table responsive table-striped table-hover text-center" cellspacing="0" width="100%">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Fecha</th>
                     <th>Generador</th>
                     <th>Residuo</th>
@@ -41,6 +42,7 @@
             <tbody>
                 {% for item in pesaje %}
                 <tr>
+                    <td>{{ item.id }} </td>
                     <td>{{ item.fcreacion |date:"d/m/Y H:i"}}</td>
                     <td>{{ item.generador }} </td>
                     <td>{{ item.residuo}}</td>
@@ -102,7 +104,7 @@
                 "sInfoPostFix": "",
                 "sSearch": "",
                 "sUrl": "",
-                searchPlaceholder: "Buscar",
+                "searchPlaceholder": "Buscar",
                 "sInfoThousands": ",",
                 "sLoadingRecords": "Cargando...",
                 "oPaginate": {

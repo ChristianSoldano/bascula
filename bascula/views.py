@@ -98,7 +98,7 @@ def GuardarPesaje(request):
             if not generador.exists() or not residuo.exists() or not transportista.exists() or not camion.exists() or not destino.exists():
                 return HttpResponseBadRequest()
 
-            Pesaje(
+            pesaje = Pesaje(
                 generador=generador.first().nombre,
                 residuo=residuo.first().nombre,
                 transportista=transportista.first().nombre,
@@ -108,8 +108,9 @@ def GuardarPesaje(request):
                 costo=((float(peso) - camion.first().tara)
                        * residuo.first().costo_tonelada),
                 usuario=Usuario.objects.get(id=request.user.id)
-            ).save()
-            return HttpResponse(status=200)
+            )
+            pesaje.save()
+            return HttpResponse(json.dumps(pesaje.toJson()), content_type='application/json', status=200)
         else:
             return HttpResponseBadRequest()
 
@@ -117,3 +118,5 @@ def GuardarPesaje(request):
 def logout_request(request):
     logout(request)
     return redirect("login")
+
+
