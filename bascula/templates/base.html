@@ -32,7 +32,7 @@
                     </div>
                     <ul class="navbar-nav">
                         <span class="ml-5 nav-username">{% if request.user.last_name and request.user.first_name %}{{request.user.last_name | upper}} {{request.user.first_name | upper}}{% else %}{{request.user.username | upper}}{% endif %}</span>
-                        {% if request.resolver_match.url_name != 'pesajes' %}
+                        {% if request.user.is_staff == 1 %}
                         <li class="nav-item">
                             <a href="{% url 'pesajes' %}" class="nav-link"><span
                                     class="d-lg-none">Pesajes</span><i class="d-none d-lg-block fas fa-boxes fa-2x"

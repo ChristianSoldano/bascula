@@ -21,30 +21,33 @@ def home(request):
                    })
 
 def pesajes(request):
-    cursor = connection.cursor()
-    cursor.execute("SELECT MIN(FCREACION) FROM PESAJES")
-    row = cursor.fetchone()
-    minDate = row[0]
-    now = datetime.datetime.now()
+    if request.user.is_superuser:
+        cursor = connection.cursor()
+        cursor.execute("SELECT MIN(FCREACION) FROM PESAJES")
+        row = cursor.fetchone()
+        minDate = row[0]
+        now = datetime.datetime.now()
 
-    if minDate == None:
-        return render(request, "historial.html", {'pesaje':[]})
-    
-    if request.method == 'GET':
-        if "periodo" in request.GET:                
-            try:
-                fechas = request.GET["periodo"].split(" - ")
-                desde = datetime.datetime.strptime(fechas[0], '%d/%m/%Y')
-                hasta = datetime.datetime.strptime(fechas[1], '%d/%m/%Y')
-                pesajes = Pesaje.objects.all().filter(activo=1, fcreacion__range=[desde.strftime('%Y-%m-%d %H:%M'), (hasta+ datetime.timedelta(1)).strftime('%Y-%m-%d %H:%M')]).order_by('-fcreacion')
-                return render(request, "historial.html", {'pesaje': pesajes, 'desde': desde.strftime('%d/%m/%Y'), 'hasta': hasta.strftime('%d/%m/%Y')})
-            except Exception as e:  
-                pass
-    hasta = (now + datetime.timedelta(1))
-    pesajes = Pesaje.objects.all().filter(activo=1, fcreacion__range=[minDate, hasta.strftime('%Y-%m-%d %H:%M')]).order_by('-fcreacion')
-    return render(request, "historial.html", {'pesaje': pesajes, 'desde': minDate.strftime('%d/%m/%Y'), 'hasta': hasta.strftime('%d/%m/%Y')})
+        if minDate == None:
+            return render(request, "historial.html", {'pesaje':[]})
+        
+        if request.method == 'GET':
+            if "periodo" in request.GET:                
+                try:
+                    fechas = request.GET["periodo"].split(" - ")
+                    desde = datetime.datetime.strptime(fechas[0], '%d/%m/%Y')
+                    hasta = datetime.datetime.strptime(fechas[1], '%d/%m/%Y')
+                    pesajes = Pesaje.objects.all().filter(activo=1, fcreacion__range=[desde.strftime('%Y-%m-%d %H:%M'), (hasta+ datetime.timedelta(1)).strftime('%Y-%m-%d %H:%M')]).order_by('-fcreacion')
+                    return render(request, "historial.html", {'pesaje': pesajes, 'desde': desde.strftime('%d/%m/%Y'), 'hasta': hasta.strftime('%d/%m/%Y')})
+                except Exception as e:  
+                    pass
+        hasta = (now + datetime.timedelta(1))
+        pesajes = Pesaje.objects.all().filter(activo=1, fcreacion__range=[minDate, hasta.strftime('%Y-%m-%d %H:%M')]).order_by('-fcreacion')
+        return render(request, "historial.html", {'pesaje': pesajes, 'desde': minDate.strftime('%d/%m/%Y'), 'hasta': hasta.strftime('%d/%m/%Y')})
+    else:
+         return redirect("login")
 
-
+        
 def GetResiduosbyIdGenerador(request):
     if request.method == 'GET':
         if "idGenerador" in request.GET:
