@@ -262,15 +262,14 @@
                         if (result.isConfirmed) {
                             swal.fire({
                                 title: "Registro",
-                                html: '<p class="texto-recibo"> Número de registro: ' + data.id + '<br>' +
-                                    'Fecha: ' + data.fcreacion + '<br>' +
-                                    'Generador: ' + data.generador + '<br>' +
-                                    'Residuo: ' + data.residuo + '<br>' +
-                                    'Transportista: ' + data.transportista + '<br>' +
-                                    'Camion: ' + data.camion + '<br>' +
-                                    'Destino: ' + data.destino + '<br>' +
-                                    'Pesaje: ' + data.pesaje + '  kg <br>' +
-                                    'Costo: $' + data.costo + '<br> </p>'
+                                html: '<div class="recibo">  <h5>Número de registro:</h5> ' + data.id + '<br>' +
+                                    '<h5>Fecha: </h5>' + data.fcreacion + '<br>' +
+                                    '<h5>Generador: </h5>' + data.generador + '<br>' +
+                                    '<h5>Residuo: </h5>' + data.residuo + '<br>' +
+                                    '<h5>Transportista: </h5>' + data.transportista + '<br>' +
+                                    '<h5>Camion: </h5>' + data.camion + '<br>' +
+                                    '<h5>Destino: </h5>' + data.destino + '<br>' +
+                                    '<h5>Pesaje: </h5>' + data.pesaje + '  kg <br></div>'
                             })
                         }
                     });

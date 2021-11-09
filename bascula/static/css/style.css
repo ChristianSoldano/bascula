@@ -49,3 +49,18 @@
     background-color: #614caf; /* Green */
     color: white;
   }
+
+  .recibo{
+    text-align: center;
+  }
+
+  h5{
+    text-align: center;
+    line-height: 30pt;
+    font-size: 12pt;
+    color: #222;
+    font-weight: bolder;
+    display: inline;
+    
+
+  }
