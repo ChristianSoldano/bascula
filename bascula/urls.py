@@ -7,6 +7,7 @@ urlpatterns = [
     path('', LoginView.as_view(template_name='login.html', redirect_authenticated_user=True), name="login"),
     path('logout/', logout_request, name='logout'),
     path('inicio/', login_required(home), name='home'),
+    path('usuario/', login_required(usuario), name='usuario'),
     path('pesajes/', login_required(pesajes), name='pesajes'),
     path('ajax/GetResiduosbyIdGenerador', login_required(GetResiduosbyIdGenerador), name="ResiduosPorGenerador"),
     path('ajax/GetCamionbyIdTransportista', login_required(GetCamionbyIdTransportista), name="GetCamionbyIdTransportista"),

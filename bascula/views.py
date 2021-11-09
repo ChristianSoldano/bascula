@@ -9,6 +9,8 @@ from django.db import connection
 def login(request):
     return render(request, "login.html")
 
+def usuario(request):
+    return render(request, "usuario.html")
 
 def home(request):
     generadores = Generador.objects.all().filter(activo=1)

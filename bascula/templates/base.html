@@ -46,6 +46,13 @@
                                     data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cargar Pesaje"></i></a>
                         </li>
                         {% endif %}
+                        {% if request.user.is_staff == 0 %}
+                        <li class="nav-item">
+                            <a href="/usuario" class="nav-link"><span class="d-lg-none">Cambiar contraseña</span><i
+                                    class="d-none d-lg-block fa fa-cog fa-2x" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" title="Cambiar contraseña"></i></a>
+                        </li>
+                        {% endif %}
                         {% if request.user.is_staff == 1 %}
                         <li class="nav-item">
                             <a href="/admin" class="nav-link"><span class="d-lg-none">Administración</span><i
