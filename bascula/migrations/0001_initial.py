@@ -448,7 +448,7 @@ def inserts(apps, schema_editor):
         `css_module_background_selected_color`,`css_module_link_selected_color`,`logo_max_height`,`logo_max_width`)
         VALUES (1,'Pesajes Administración',1,'Administración Pesajes',1,'',0,'#0C4B33','#F5DD5D','#44B78B','#FFFFFF',
         '#C9F0DD','#44B78B','#FFFFFF','#FFFFFF','#C9F0DD',1,'#0C3C26','#156641','#0C4B33','#0C3C26','#FFFFFF',
-        '#BA2121','#A41515','#FFFFFF','',1,1,'#000000',1,'#FFFFFF',1,'admin-interface/favicon/favicon.png','0.3',
+        '#BA2121','#A41515','#FFFFFF','',1,1,'#000000',1,'#FFFFFF',1,'','0.3',
         '',1,'#E74C3C',1,1,1,'code',1,0,0,'#FFFFCC','#FFFFFF',100,400);""")
 
 class Migration(migrations.Migration):

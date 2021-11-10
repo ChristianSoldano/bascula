@@ -9,9 +9,6 @@ from django.db import connection
 def login(request):
     return render(request, "login.html")
 
-def usuario(request):
-    return render(request, "usuario.html")
-
 def home(request):
     generadores = Generador.objects.all().filter(activo=1)
     transportistas = Transportista.objects.all().order_by('codigo').filter(activo=1)
@@ -115,9 +112,27 @@ def GuardarPesaje(request):
                 usuario=Usuario.objects.get(id=request.user.id)
             )
             pesaje.save()
-            return HttpResponse(json.dumps(pesaje.toJson()), content_type='application/json', status=200)
+            response = pesaje.toJson()
+            response['usuario'] = pesaje.usuario.username
+            return HttpResponse(json.dumps(response), content_type='application/json', status=200)
         else:
             return HttpResponseBadRequest()
+
+def cambiarPassword(request):
+    if request.method == 'POST':     
+        if request.POST["currentPassword"] != "" and request.POST["newPassword"] != "" and request.POST["newPasswordConfirm"] != "":            
+            u = request.user
+            if not u.check_password(request.POST["currentPassword"]):
+                return HttpResponse(json.dumps({"message": "Contraseña incorrecta"}), content_type='application/json', status=400)
+            if request.POST["newPassword"] != request.POST["newPasswordConfirm"]:
+                return HttpResponse(json.dumps({"message": "La nueva contraseña no coincide con la confirmación"}), content_type='application/json', status=400)
+            u.set_password(request.POST["newPassword"])
+            u.save()
+            return HttpResponse(json.dumps({"message": "Contraseña actualizada"}), content_type='application/json', status=200)
+        else:
+            return HttpResponse(json.dumps({"message": "Complete todos los campos"}), content_type='application/json', status=400)
+    else:
+        return HttpResponse(json.dumps({"message": "Error al actualizar la contraseña"}), content_type='application/json', status=400)
 
 
 def logout_request(request):

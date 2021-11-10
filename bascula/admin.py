@@ -1,7 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.models import Group
+from django.contrib.auth.admin import UserAdmin
 from bascula import *
 from bascula.models import *
     
+
 @admin.register(Generador)
 class GeneradorAdmin(admin.ModelAdmin):
     list_display = [ 'nombre', 'nombreFantasia', 'cuit']

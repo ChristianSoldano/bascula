@@ -30,15 +30,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="d-flex me-auto mb-2 mb-lg-0">
                     </div>
-                    <ul class="navbar-nav">
-                        <span class="ml-5 nav-username">{% if request.user.last_name and request.user.first_name %}{{request.user.last_name | upper}} {{request.user.first_name | upper}}{% else %}{{request.user.username | upper}}{% endif %}</span>
-                        {% if request.user.is_staff == 1 %}
-                        <li class="nav-item">
-                            <a href="{% url 'pesajes' %}" class="nav-link"><span
-                                    class="d-lg-none">Pesajes</span><i class="d-none d-lg-block fas fa-boxes fa-2x"
-                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="Pesajes"></i></a>
-                        </li>
-                        {% endif %}
+                    <ul class="navbar-nav">                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-username" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if request.user.last_name and request.user.first_name %}{{request.user.last_name | upper}} {{request.user.first_name | upper}}{% else %}{{request.user.username | upper}}{% endif %}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalUser">Cambiar Contraseña</button></li>
+                            </ul>
+                        </li>                        
                         {% if request.resolver_match.url_name != 'home' %}
                         <li class="nav-item">
                             <a href="{% url 'home' %}" class="nav-link"><span class="d-lg-none">Cargar
@@ -46,14 +46,14 @@
                                     data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cargar Pesaje"></i></a>
                         </li>
                         {% endif %}
-                        {% if request.user.is_staff == 0 %}
+                        {% if request.user.is_staff == 1 %}
+                        {% if request.resolver_match.url_name != 'pesajes' %}
                         <li class="nav-item">
-                            <a href="/usuario" class="nav-link"><span class="d-lg-none">Cambiar contraseña</span><i
-                                    class="d-none d-lg-block fa fa-cog fa-2x" data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom" title="Cambiar contraseña"></i></a>
+                            <a href="{% url 'pesajes' %}" class="nav-link"><span
+                                    class="d-lg-none">Pesajes</span><i class="d-none d-lg-block fas fa-boxes fa-2x"
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom" title="Pesajes"></i></a>
                         </li>
                         {% endif %}
-                        {% if request.user.is_staff == 1 %}
                         <li class="nav-item">
                             <a href="/admin" class="nav-link"><span class="d-lg-none">Administración</span><i
                                     class="d-none d-lg-block fas fa-user-tie fa-2x" data-bs-toggle="tooltip"
@@ -70,9 +70,38 @@
             </div>
         </nav>
         {% endif %}        
-        {% block content %}{% endblock %}
-        
+        {% block content %}{% endblock %}        
     </div>
+
+    <div class="modal fade" id="modalUser" tabindex="-1" aria-labelledby="modalUserLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">                   
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Password">
+                        <label for="currentPassword">Contraseña actual</label>
+                    </div>
+                    <div class="form-floating mt-3">
+                        <input type="password" class="form-control" id="newPassword" placeholder="Password">
+                        <label for="newPassword">Nueva contraseña</label>
+                    </div>
+                    <div class="form-floating mt-3">
+                        <input type="password" class="form-control" id="newPasswordConfirm" placeholder="Password">
+                        <label for="newPasswordConfirm">Confirmar nueva contraseña</label>
+                    </div>                  
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btnSendChangePassword">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <footer class="footer">
         <p> Chrisma desarrolladores <br>
             chrisma.software@gmail.com <br>
@@ -92,7 +121,56 @@
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+        });
+
+        $("#btnSendChangePassword").click(function(){
+            showloading();
+            $.ajax({
+                url: "/ajax/cambiarPassword",
+                type: "post",
+                data: {
+                    currentPassword: $("#currentPassword").val(),
+                    newPassword: $("#newPassword").val(),
+                    newPasswordConfirm: $("#newPasswordConfirm").val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(){
+                    $("#modalUser").modal('hide');
+                    hideLoading();
+                    Swal.fire({
+                        title: '¡Contraseña actualizada!', 
+                        text: 'Deberá iniciar sesión nuevamente',  
+                        icon: 'success',                                                        
+                    }).then(()=>{
+                        window.location.href = "/"
+                    });
+                },
+                error: function(response){
+                    hideLoading();                    
+                    Swal.fire({
+                        title: 'Error',  
+                        text: response.responseJSON.message, 
+                        icon: 'error',                                                        
+                    });
+                }
+            });
+        });
+
+        function showloading(){
+            Swal.fire({
+                title: 'Por favor aguarde',
+                timerProgressBar: true,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }            
+            });
+        }
+
+        function hideLoading(){
+            Swal.close();
+        }      
+             
     </script>
     {% block javascript %}{% endblock%}
 </body>
