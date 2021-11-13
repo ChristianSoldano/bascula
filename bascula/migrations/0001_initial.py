@@ -383,7 +383,7 @@ def inserts(apps, schema_editor):
         (50053, 'ORTALLI, SERGIO BERNARDO', 'TRANSPORTE ORTALLI', '20-22522733-1', '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1),
         (50057, 'AMADO, LUIS ALBERTO', 'TRANSPORTE AMADO', '20-10528680-6', '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1),
         (50061, 'RABAZZA, CARLOS ROBERTO', 'TRANSPORTE CARLOS', '20-17047386-9', '0000-00-00 00:00:00', 1)""")
-        cursor.execute("""INSERT INTO CAMIONES (`PATENTE`, `CODIGO_TRANSPORTISTA`, `TARA`, `FCREACION`, `ACTIVO`) VALUES
+        cursor.execute("""INSERT INTO camiones (`PATENTE`, `CODIGO_TRANSPORTISTA`, `TARA`, `FCREACION`, `ACTIVO`) VALUES
         ('AA414ET',50024,10760, '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1),
         ('AA436BO',50024,10720, '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1),
         ('AA436BP',50024,11240, '""" + datetime.datetime.now().strftime('%Y-%m-%d %H:%M') + """', 1),

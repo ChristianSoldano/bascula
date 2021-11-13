@@ -124,7 +124,7 @@
         });
 
         $("#btnSendChangePassword").click(function(){
-            showloading();
+            showLoading();
             $.ajax({
                 url: "/ajax/cambiarPassword",
                 type: "post",
@@ -156,9 +156,9 @@
             });
         });
 
-        function showloading(){
+        function showLoading(title){
             Swal.fire({
-                title: 'Por favor aguarde',
+                title: title ? title : 'Por favor aguarde',
                 timerProgressBar: true,
                 allowOutsideClick: false,
                 didOpen: () => {

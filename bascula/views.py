@@ -22,7 +22,7 @@ def home(request):
 def pesajes(request):
     if request.user.is_superuser:
         cursor = connection.cursor()
-        cursor.execute("SELECT MIN(FCREACION) FROM PESAJES")
+        cursor.execute("SELECT MIN(FCREACION) FROM pesajes")
         row = cursor.fetchone()
         minDate = row[0]
         now = datetime.datetime.now()

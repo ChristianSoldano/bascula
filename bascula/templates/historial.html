@@ -34,8 +34,8 @@
                     <th>Transportista</th>
                     <th>Camion</th>
                     <th>Destino</th>
-                    <th>Pesaje</th>
-                    <th>Costo</th>
+                    <th>Pesaje (kg)</th>
+                    <th>Costo ($)</th>
                     <th>Usuario Creador</th>
                 </tr>
             </thead>
@@ -49,8 +49,8 @@
                     <td>{{ item.transportista}}</td>
                     <td>{{ item.camion }}</td>
                     <td>{{ item.destino }}</td>
-                    <td>{{ item.pesaje}} kg</td>
-                    <td>${{ item.costo }}</td>
+                    <td>{{ item.pesaje}}</td>
+                    <td>{{ item.costo }}</td>
                     <td>{{ item.usuario }}</td>
                 </tr>
                 {% endfor %}
